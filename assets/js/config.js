@@ -156,8 +156,8 @@ window.SITE_CONFIG = {
   "analytics": {
     "metrika": ""
   },
-  "phone": "",
-  "phoneHref": "",
-  "whatsappUrl": "",
-  "telegramUrl": ""
+  "phone": "+7 931 530-50-26",
+  "phoneHref": "+79315305026",
+  "whatsappUrl": "https://wa.me/79315305026",
+  "telegramUrl": "https://t.me/VetSluzhbaSPB"
 };

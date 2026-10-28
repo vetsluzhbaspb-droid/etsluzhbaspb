@@ -368,7 +368,8 @@
       inp.addEventListener("focus", function () { if (!inp.value) inp.value = "+7 ("; });
       inp.addEventListener("blur", function () { if (inp.value.replace(/\D/g, "").length <= 1) inp.value = ""; });
     });
-    if (!C.formEndpoint) {
+    var messengerMode = !C.formEndpoint && !!(C.whatsappUrl || C.telegramUrl);
+    if (!C.formEndpoint && !messengerMode) {
       // Приём заявок не подключён: не даём вводить данные, которые никуда не уйдут
       $$("form[data-form]").forEach(function (form) {
         $$("input, select, textarea, button[type=submit]", form).forEach(function (el) { el.disabled = true; });
@@ -387,7 +388,8 @@
         var ok = true;
         $$(".field", form).forEach(function (f) { f.classList.remove("is-invalid"); var er = $(".field__error", f); if (er) er.textContent = ""; });
         var tel = $("input[type=tel]", form);
-        if (tel && tel.required && tel.value.replace(/\D/g, "").length !== 11) {
+        var telLen = tel ? tel.value.replace(/\D/g, "").length : 0;
+        if (tel && ((tel.required && telLen !== 11) || (!tel.required && telLen > 1 && telLen !== 11))) {
           ok = false; var f = tel.closest(".field"); f.classList.add("is-invalid"); $(".field__error", f).textContent = "Введите номер полностью: +7 и ещё 10 цифр.";
         }
         var consent = $("input[name=consent]", form);
@@ -411,6 +413,30 @@
           track("form_submit", { form: data.form, topic: data.topic });
           if (isBooking) track("booking_request", { topic: data.topic, has_calc: !!data.details });
         };
+        if (messengerMode) {
+          var via = (e.submitter && e.submitter.getAttribute("data-send")) || (C.whatsappUrl ? "wa" : "tg");
+          var lines = ["Здравствуйте! Заявка с сайта " + C.brand + "."];
+          if (data.topic) lines.push("Услуга: " + data.topic);
+          if (data.name) lines.push("Имя: " + data.name);
+          if (data.phone && data.phone.replace(/\D/g, "").length === 11) lines.push("Телефон: " + data.phone);
+          if (data.time) lines.push("Удобное время: " + data.time);
+          if (data.location) lines.push("Район или адрес: " + data.location);
+          if (data.details) lines.push("Расчёт: " + data.details);
+          var text = lines.join("\n");
+          success();
+          if (via === "wa") {
+            track("whatsapp_click", { link_url: C.whatsappUrl, from: "form" });
+            window.open(C.whatsappUrl + "?text=" + encodeURIComponent(text), "_blank", "noopener");
+            done("Откроется WhatsApp", " Проверьте текст заявки и нажмите «Отправить» в чате.", true);
+          } else {
+            track("telegram_click", { link_url: C.telegramUrl, from: "form" });
+            var copied = false;
+            try { if (navigator.clipboard) { navigator.clipboard.writeText(text); copied = true; } } catch (err) {}
+            window.open(C.telegramUrl, "_blank", "noopener");
+            done("Откроется Telegram", copied ? " Текст заявки скопирован — вставьте его в чат и отправьте." : " Напишите в чат, что вам нужно, — ответим.", true);
+          }
+          return;
+        }
         if (C.formEndpoint) {
           btn.disabled = true;
           fetch(C.formEndpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })

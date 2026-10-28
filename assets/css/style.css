@@ -824,3 +824,7 @@ form[data-form] :disabled { cursor: not-allowed; opacity: .6; }
 .prose thead th { color: var(--muted); font-weight: 600; font-size: 0.85rem; background: var(--tint-2); }
 .prose tbody th { color: var(--heading); font-weight: 600; }
 .prices-links { margin-top: 6px; font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+/* Отправка заявки в мессенджер */
+.form-send-title { margin: 4px 0 8px; font-weight: 600; color: var(--heading); font-size: 0.92rem; }
+.form-send { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 420px) { .form-send { grid-template-columns: 1fr; } }
