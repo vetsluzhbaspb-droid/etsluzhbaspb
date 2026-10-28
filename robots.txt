@@ -1,0 +1,6 @@
+# Индексация открыта для поисковых и AI-систем
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+Sitemap: https://vetsluzhbaspb.com/sitemap.xml
