@@ -834,3 +834,6 @@ form[data-form] :disabled { cursor: not-allowed; opacity: .6; }
 .form-send { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 420px) { .form-send { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .card__img { aspect-ratio: 16 / 9; } }
+
+.card--media-sm { grid-template-rows: auto auto 1fr; }
+.card--media-sm .card__img { aspect-ratio: 16 / 9; }
