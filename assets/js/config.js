@@ -156,8 +156,12 @@ window.SITE_CONFIG = {
   "analytics": {
     "metrika": ""
   },
-  "phone": "+7 931 530-50-26",
-  "phoneHref": "+79315305026",
+  "phone": "+7-812-945-56-34",
+  "phoneHref": "+78129455634",
   "whatsappUrl": "https://wa.me/79315305026",
-  "telegramUrl": "https://t.me/VetSluzhbaSPB"
+  "telegramUrl": "https://t.me/VetSluzhbaSPB",
+  "tgBot": {
+    "token": "8722221858:AAE_B66ZJzbfhF244P18OdSSTYCHjmQamr8",
+    "chatId": "361655089"
+  }
 };

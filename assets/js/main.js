@@ -11,7 +11,7 @@
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var isNum = function (v) { return typeof v === "number" && isFinite(v); };
   var PH_PRICE = '<span class="tk">[ADD REAL PRICE]</span>';
-  var priceHtml = function (v) { return isNum(v) ? (v === 0 ? "бесплатно" : rub(v)) : PH_PRICE; };
+  var priceHtml = function (v) { return isNum(v) ? (v === 0 ? "бесплатно" : "от " + rub(v)) : PH_PRICE; };
 
   /* ---------- 1. Аналитика: события и загрузка счётчиков после согласия ---------- */
   var A = C.analytics || {};
@@ -240,7 +240,7 @@
       }
       if (C.zones && C.zones.length) {
         body += '<div class="calc__group"><span class="calc__group-title">Где находится питомец</span><div class="options options--sm" role="radiogroup" aria-label="Зона выезда">' + C.zones.map(function (z) {
-          var p = isNum(z.price) ? (z.price === 0 ? "без доплаты" : "+" + rub(z.price)) : "доплата уточняется";
+          var p = isNum(z.price) ? (z.price === 0 ? "без доплаты" : "доплата от " + rub(z.price)) : "доплата уточняется";
           return self.option("radio", "zone", z.id, s.zone === z.id, "", z.label, p, true);
         }).join("") + "</div></div>";
       }
@@ -250,7 +250,7 @@
       body += '<span class="eyebrow">Предварительный расчёт</span><h3>' + (r.unknown ? "Ваш запрос стоимости" : "Ориентировочная стоимость") + "</h3>";
       body += '<div class="calc-summary">' + r.rows.map(function (row) {
         return '<div class="calc-summary__row' + (row.muted ? " calc-summary__row--muted" : "") + '"><span>' + esc(row.label) + "</span><span>" + row.value + "</span></div>";
-      }).join("") + '<div class="calc-summary__total"><span>Итого</span><strong>' + (r.unknown ? "назовём по телефону" : (r.approx ? "от " : "") + rub(r.total)) + "</strong></div></div>";
+      }).join("") + '<div class="calc-summary__total"><span>Итого</span><strong>' + (r.unknown ? "назовём по телефону" : "от " + rub(r.total)) + "</strong></div></div>";
       body += '<p class="calc__hint">Окончательную стоимость подтвердим до начала работы. Расчёт не является публичной офертой.</p>';
       body += '<div class="btn-row"><button type="button" class="btn btn--primary" data-open="callback" data-topic="Узнать цену" data-details="' + esc(r.summary) + '" data-booking="1">' + icon("send") + 'Отправить запрос</button><button type="button" class="btn" data-calc-restart>' + icon("arrow-left") + "Пересчитать</button></div>";
     }
@@ -303,7 +303,7 @@
     rows.push({ label: "Питомец", value: esc(petLabel), muted: true });
     parts.push("Питомец: " + petLabel);
     var add = function (label, price) {
-      if (isNum(price)) { var v = price === 0 ? "бесплатно" : rub(price); rows.push({ label: label, value: v }); total += price; parts.push(label + " — " + v); }
+      if (isNum(price)) { var v = price === 0 ? "бесплатно" : "от " + rub(price); rows.push({ label: label, value: v }); total += price; parts.push(label + " — " + v); }
       else { rows.push({ label: label, value: PH_PRICE }); unknown = true; parts.push(label); }
     };
     if (s.situation === "vet") add(C.services.euth.label, C.services.euth.prices[s.weight]);
@@ -321,7 +321,7 @@
       else if (z.price === 0) { rows.push({ label: "Выезд: " + z.label, value: "без доплаты", muted: true }); parts.push("Выезд: " + z.label); }
       else add("Выезд: " + z.label, z.price);
     }
-    if (!unknown) parts.push("Итого: " + (approx ? "от " : "") + rub(total));
+    if (!unknown) parts.push("Итого: от " + rub(total));
     return { rows: rows, total: total, approx: approx, unknown: unknown, summary: parts.join("; ") };
   };
   function initCalcs() { $$("[data-calc]").forEach(function (root, idx) { new Calc(root, idx); }); }
@@ -368,8 +368,9 @@
       inp.addEventListener("focus", function () { if (!inp.value) inp.value = "+7 ("; });
       inp.addEventListener("blur", function () { if (inp.value.replace(/\D/g, "").length <= 1) inp.value = ""; });
     });
-    var messengerMode = !C.formEndpoint && !!(C.whatsappUrl || C.telegramUrl);
-    if (!C.formEndpoint && !messengerMode) {
+    var botMode = !C.formEndpoint && !!(C.tgBot && C.tgBot.token && C.tgBot.chatId);
+    var messengerMode = !C.formEndpoint && !botMode && !!(C.whatsappUrl || C.telegramUrl);
+    if (!C.formEndpoint && !botMode && !messengerMode) {
       // Приём заявок не подключён: не даём вводить данные, которые никуда не уйдут
       $$("form[data-form]").forEach(function (form) {
         $$("input, select, textarea, button[type=submit]", form).forEach(function (el) { el.disabled = true; });
@@ -413,6 +414,27 @@
           track("form_submit", { form: data.form, topic: data.topic });
           if (isBooking) track("booking_request", { topic: data.topic, has_calc: !!data.details });
         };
+        if (botMode) {
+          var msg = ["Новая заявка с сайта " + C.brand];
+          if (data.topic) msg.push("Услуга: " + data.topic);
+          if (data.name) msg.push("Имя: " + data.name);
+          if (data.phone) msg.push("Телефон: " + data.phone);
+          if (data.time) msg.push("Удобное время: " + data.time);
+          if (data.location) msg.push("Район или адрес: " + data.location);
+          if (data.details) msg.push("Расчёт: " + data.details);
+          msg.push("Страница: " + location.href);
+          btn.disabled = true;
+          fetch("https://api.telegram.org/bot" + C.tgBot.token + "/sendMessage", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "chat_id=" + encodeURIComponent(C.tgBot.chatId) + "&text=" + encodeURIComponent(msg.join("\n").slice(0, 4000))
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (j) { if (!j.ok) throw new Error(j.description); form.reset(); success(); done("Заявка отправлена", " Мы перезвоним вам в ближайшее время.", true); })
+            .catch(function () { done("Не получилось отправить заявку", " Пожалуйста, позвоните" + (C.phone ? ": " + C.phone : "") + (C.whatsappUrl ? " или напишите в WhatsApp" : "") + ".", false); })
+            .then(function () { btn.disabled = false; });
+          return;
+        }
         if (messengerMode) {
           var via = (e.submitter && e.submitter.getAttribute("data-send")) || (C.whatsappUrl ? "wa" : "tg");
           var lines = ["Здравствуйте! Заявка с сайта " + C.brand + "."];
@@ -464,8 +486,8 @@
       if (window.__closeMobileMenu) window.__closeMobileMenu();
       var topic = opener.getAttribute("data-topic");
       var details = opener.getAttribute("data-details") || "";
-      var sel = $("select[name=topic]", dlg);
-      if (sel && topic) { var has = $$("option", sel).some(function (o) { return o.value === topic; }); if (has) sel.value = topic; }
+      var sel = $("[name=topic]", dlg);
+      if (sel && topic) sel.value = topic;
       var hid = $("input[name=details]", dlg), note = $(".form-details", dlg);
       if (hid) hid.value = details;
       if (note) { note.hidden = !details; note.textContent = details ? "К заявке приложен расчёт: " + details : ""; }
