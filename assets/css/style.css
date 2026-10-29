@@ -345,8 +345,9 @@ a.chip:hover { border-color: var(--primary); color: var(--primary); }
 /* ---------- Возможности ---------- */
 .feature-card { display: grid; gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; min-width: 0; }
 .feature-card__media { aspect-ratio: 16 / 9; background: linear-gradient(160deg, var(--tint), var(--primary-soft)); display: grid; place-items: center; color: var(--primary); position: relative; }
+.feature-card__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .feature-card__media > .icon { width: 64px; height: 64px; stroke-width: 1.2; }
-.feature-card__media .chip { position: absolute; left: 14px; bottom: 14px; font-size: 0.78rem; padding: 5px 12px; }
+.feature-card__media .chip { position: absolute; z-index: 1; left: 14px; bottom: 14px; font-size: 0.78rem; padding: 5px 12px; }
 .feature-card__body { padding: 22px 24px 24px; display: grid; gap: 10px; }
 .feature-card__body p { color: var(--muted); font-size: 0.93rem; }
 .feature-card__links { display: flex; gap: 18px; flex-wrap: wrap; padding-top: 4px; }
