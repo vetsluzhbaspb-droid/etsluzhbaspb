@@ -162,6 +162,6 @@ window.SITE_CONFIG = {
   "telegramUrl": "https://t.me/VetSluzhbaSPB",
   "tgBot": {
     "token": "8722221858:AAE_B66ZJzbfhF244P18OdSSTYCHjmQamr8",
-    "chatId": "361655089"
+    "chatId": "361655089,9222388135"
   }
 };

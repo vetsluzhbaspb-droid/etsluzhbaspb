@@ -424,12 +424,16 @@
           if (data.details) msg.push("Расчёт: " + data.details);
           msg.push("Страница: " + location.href);
           btn.disabled = true;
-          fetch("https://api.telegram.org/bot" + C.tgBot.token + "/sendMessage", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: "chat_id=" + encodeURIComponent(C.tgBot.chatId) + "&text=" + encodeURIComponent(msg.join("\n").slice(0, 4000))
-          })
-            .then(function (r) { return r.json(); })
+          var text = msg.join("\n").slice(0, 4000);
+          var sends = String(C.tgBot.chatId).split(",").map(function (id) {
+            return fetch("https://api.telegram.org/bot" + C.tgBot.token + "/sendMessage", {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: "chat_id=" + encodeURIComponent(id.trim()) + "&text=" + encodeURIComponent(text)
+            }).then(function (r) { return r.json(); }).catch(function () { return { ok: false }; });
+          });
+          Promise.all(sends)
+            .then(function (res) { return { ok: res.some(function (x) { return x.ok; }) }; })
             .then(function (j) { if (!j.ok) throw new Error(j.description); form.reset(); success(); done("Заявка отправлена", " Мы перезвоним вам в ближайшее время.", true); })
             .catch(function () { done("Не получилось отправить заявку", " Пожалуйста, позвоните" + (C.phone ? ": " + C.phone : "") + (C.whatsappUrl ? " или напишите в WhatsApp" : "") + ".", false); })
             .then(function () { btn.disabled = false; });
