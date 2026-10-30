@@ -682,9 +682,37 @@ def districts_block():
             f'<div class="panel"><h3>Пригороды</h3>{chips(D["districts"]["suburbs"], "SUBURBS")}</div></div>')
 
 
-def review_cards(n=3):
-    card = f'''<article class="review"><div class="review__head"><span class="review__avatar">{icon("user")}</span><span class="review__who"><strong>{tok("NAME")}</strong><small>Отзыв владельца</small></span></div><p class="review__text">{tok("REVIEW")}</p><span class="review__tag">{icon("check")}Публикуется с согласия автора</span></article>'''
-    return card * n
+# Отзывы — _src/reviews.json (добавляются через админку, только реальные и с согласия автора)
+REVIEWS = [r for r in (json.loads((SRC / "reviews.json").read_text(encoding="utf-8")) if (SRC / "reviews.json").exists() else [])
+           if r.get("consent") and r.get("text", "").strip() and r.get("name", "").strip()]
+REVIEW_SOURCES = {"site": "", "yandex": "Яндекс Карты", "twogis": "2ГИС", "google": "Google Карты", "avito": "Авито", "whatsapp": "WhatsApp", "telegram": "Telegram", "vk": "ВКонтакте"}
+MONTHS = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"]
+
+
+def review_date(d):
+    m = re.fullmatch(r"(\d{4})-(\d{2})(?:-\d{2})?", d or "")
+    return f"{MONTHS[int(m.group(2)) - 1].capitalize()} {m.group(1)}" if m and 1 <= int(m.group(2)) <= 12 else (d or "")
+
+
+def review_cards(n=None):
+    if not REVIEWS:
+        card = f'''<article class="review"><div class="review__head"><span class="review__avatar">{icon("user")}</span><span class="review__who"><strong>{tok("NAME")}</strong><small>Отзыв владельца</small></span></div><p class="review__text">{tok("REVIEW")}</p><span class="review__tag">{icon("check")}Публикуется с согласия автора</span></article>'''
+        return card * (n or 3)
+    out = ""
+    for r in REVIEWS[:n] if n else REVIEWS:
+        name = html.escape(r["name"].strip())
+        meta = " · ".join(x for x in [html.escape(r.get("pet", "").strip()), review_date(r.get("date", "")), REVIEW_SOURCES.get(r.get("source", ""), "")] if x)
+        text = "".join(f"<p>{html.escape(par.strip())}</p>" for par in r["text"].split("\n") if par.strip())
+        try:
+            rating = max(0, min(5, int(r.get("rating") or 0)))
+        except (TypeError, ValueError):
+            rating = 0
+        stars = (f'<span class="review__stars" aria-label="Оценка {rating} из 5">' + "★" * rating + f'<span>{"★" * (5 - rating)}</span></span>') if rating else ""
+        link = r.get("link", "").strip()
+        src = (f'<a class="review__tag" href="{html.escape(link)}" target="_blank" rel="noopener nofollow">{icon("check")}Оригинал отзыва</a>' if link.startswith("http")
+               else f'<span class="review__tag">{icon("check")}Опубликован с согласия автора</span>')
+        out += f'''<article class="review review--real"><div class="review__head"><span class="review__avatar">{name[:1].upper()}</span><span class="review__who"><strong>{name}</strong><small>{meta or "Отзыв владельца"}</small></span></div>{stars}<div class="review__text">{text}</div>{src}</article>'''
+    return out
 
 
 def review_links():
@@ -871,7 +899,8 @@ PARTS = {
     "zone-h1": lambda: zone_block("h1"),
     "districts": districts_block,
     "facts": lambda: facts_block(),
-    "reviews": lambda: review_cards(),
+    "reviews": lambda: review_cards(6),
+    "reviews-all": lambda: review_cards(),
     "review-links": review_links,
     "messengers": lambda: f'<div class="chip-row">{messenger_links()}</div>',
     "contact-buttons": lambda: f'<div class="btn-row">{contact_buttons()}</div>',
@@ -882,12 +911,12 @@ PARTS = {
 
 
 # Страницы без содержания не индексируем, пока нет данных: «Отзывы» без отзывов
-NOINDEX = set() if not HIDE_EMPTY else {"otzyvy.html"}
+NOINDEX = set() if (not HIDE_EMPTY or REVIEWS) else {"otzyvy.html"}
 
 COND = {
     "bot": BOT_MODE, "nobot": not BOT_MODE,
     "team": not HIDE_EMPTY,       # карточек врачей нет в данных — показываем заглушки только в режиме заполнения
-    "reviews": not HIDE_EMPTY,    # то же для отзывов
+    "reviews": bool(REVIEWS) or not HIDE_EMPTY,  # блок отзывов виден, когда есть хотя бы один отзыв
     "phone": bool(PHONE_HREF) or not HIDE_EMPTY,
     "nophone": not PHONE_HREF and HIDE_EMPTY,
     "messengers": bool(WA_URL or TG_URL) or not HIDE_EMPTY,

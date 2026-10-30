@@ -855,3 +855,12 @@ form[data-form] :disabled { cursor: not-allowed; opacity: .6; }
   .side-call__txt { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .side-call, .side-call.is-visible { transition: none; } .side-call__ico::after { animation: none !important; } }
+
+/* ---------- Отзывы клиентов ---------- */
+.review--real { border-style: solid; border-color: var(--line); }
+.review--real .review__avatar { font-size: 1.1rem; }
+.review__stars { color: #e3a33b; letter-spacing: 2px; font-size: 1.05rem; line-height: 1; }
+.review__stars span { color: var(--line); }
+.review--real .review__text { color: var(--ink); }
+.review__text p { margin: 0; } .review__text p + p { margin-top: 8px; }
+a.review__tag { text-decoration: none; }

@@ -208,10 +208,12 @@
   function saveSite() { saveJson('_src/site.json', S.site); }
   function saveArticles() { saveJson('_src/articles.json', S.articles); }
   function saveTheme() { saveJson('_src/theme.json', S.theme); }
+  function saveReviews() { saveJson('_src/reviews.json', S.reviews); }
   function reloadData() {
     S.site = JSON.parse(cur('_src/site.json'));
     S.articles = JSON.parse(cur('_src/articles.json') || '[]');
     S.theme = Object.assign({}, THEME_DEFAULT, JSON.parse(cur('_src/theme.json') || '{}'));
+    S.reviews = JSON.parse(cur('_src/reviews.json') || '[]');
     S.pages = Object.keys(S.files).concat(Array.from(S.changes.keys()))
       .filter(function (p, i, a) { return /^_src\/pages\/[^/]+\.html$/.test(p) && a.indexOf(p) === i && cur(p) != null; })
       .map(function (p) { return p.slice('_src/pages/'.length); }).sort();
@@ -363,7 +365,7 @@
     try {
       var lists = await Promise.all([listDir('_src/pages'), listDir('assets/img')]);
       S.images = lists[1].filter(function (x) { return /\.(webp|jpe?g|png|svg|gif|avif)$/i.test(x.name); });
-      await Promise.all(['_src/site.json', '_src/articles.json', '_src/theme.json'].concat(lists[0].filter(function (x) { return /\.html$/.test(x.name); }).map(function (x) { return x.path; })).map(readText));
+      await Promise.all(['_src/site.json', '_src/articles.json', '_src/theme.json', '_src/reviews.json'].concat(lists[0].filter(function (x) { return /\.html$/.test(x.name); }).map(function (x) { return x.path; })).map(readText));
       if (S.files['_src/site.json'] == null) throw new Error('Не найден _src/site.json');
       reloadData();
       render();
@@ -376,7 +378,7 @@
   // ---------------------------------------------------------------- каркас
   var TABS = [
     ['main', 'Контакты и данные', mainTab], ['prices', 'Цены', pricesTab], ['pages', 'Страницы и тексты', pagesTab],
-    ['articles', 'Статьи', articlesTab], ['photos', 'Фото', photosTab], ['theme', 'Оформление', themeTab]
+    ['articles', 'Статьи', articlesTab], ['reviews', 'Отзывы', reviewsTab], ['photos', 'Фото', photosTab], ['theme', 'Оформление', themeTab]
   ];
   function render() {
     var tab = TABS.find(function (t) { return t[0] === S.tab; }) || TABS[0];
@@ -1024,6 +1026,52 @@
     toast('Статья добавлена в черновик. Нажмите «Опубликовать».', 5000);
   }
   function minutesWord(n) { n = Math.abs(n) % 100; var n1 = n % 10; if (n > 10 && n < 20) return 'минут'; if (n1 > 1 && n1 < 5) return 'минуты'; if (n1 === 1) return 'минута'; return 'минут'; }
+
+  // ---------------------------------------------------------------- вкладка «Отзывы»
+  var REVIEW_SOURCES = [['site', 'Прислали нам напрямую'], ['yandex', 'Яндекс Карты'], ['twogis', '2ГИС'], ['google', 'Google Карты'], ['avito', 'Авито'], ['whatsapp', 'WhatsApp'], ['telegram', 'Telegram'], ['vk', 'ВКонтакте']];
+  function reviewsTab() {
+    var cards = S.reviews.map(function (r, i) {
+      function fld(label, key, opts) {
+        opts = opts || {};
+        var el;
+        if (opts.select) {
+          el = h('select', null, opts.select.map(function (o) { return h('option', { value: o[0], selected: String(r[key] == null ? '' : r[key]) === String(o[0]) }, o[1]); }));
+          el.addEventListener('change', function () { r[key] = opts.num ? +el.value : el.value; saveReviews(); refreshHead(); });
+        } else {
+          el = h(opts.area ? 'textarea' : 'input', { type: opts.type || 'text', value: r[key] || '', rows: opts.area ? 6 : null, placeholder: opts.ph || null });
+          el.addEventListener('input', function () { r[key] = el.value; saveReviews(); refreshHead(); });
+        }
+        return h('label', { class: 'f' }, h('span', null, label), el, opts.hint ? h('small', { class: 'hint' }, opts.hint) : null);
+      }
+      var head = h('div', { class: 'row' });
+      function refreshHead() {
+        var ok = r.consent && (r.name || '').trim() && (r.text || '').trim();
+        head.replaceChildren(h('b', null, (r.name || '').trim() || 'Новый отзыв'),
+          h('span', { class: ok ? 'ok' : 'err', style: 'font-size:.85rem' }, ok ? '● будет на сайте' : '● не показывается: ' + (!r.consent ? 'нет согласия клиента' : 'заполните имя и текст')),
+          h('span', { class: 'spacer' }),
+          h('button', { class: 'btn btn--sm', disabled: i === 0, title: 'Выше', onclick: function () { var x = S.reviews.splice(i, 1)[0]; S.reviews.splice(i - 1, 0, x); saveReviews(); render(); } }, '↑'),
+          h('button', { class: 'btn btn--sm', disabled: i === S.reviews.length - 1, title: 'Ниже', onclick: function () { var x = S.reviews.splice(i, 1)[0]; S.reviews.splice(i + 1, 0, x); saveReviews(); render(); } }, '↓'),
+          h('button', { class: 'btn btn--sm btn--danger', onclick: function () { if (confirm('Удалить отзыв' + (r.name ? ' от ' + r.name : '') + '?')) { S.reviews.splice(i, 1); saveReviews(); render(); } } }, 'Удалить'));
+      }
+      refreshHead();
+      var consent = h('input', { type: 'checkbox', checked: !!r.consent });
+      consent.addEventListener('change', function () { r.consent = consent.checked; saveReviews(); refreshHead(); });
+      return h('div', { class: 'card' }, head,
+        h('div', { class: 'grid2', style: 'margin-top:12px' },
+          fld('Имя клиента (как подписать)', 'name', { ph: 'Например: Ольга К.' }),
+          fld('Питомец', 'pet', { ph: 'Например: кот Барсик', hint: 'необязательно' }),
+          fld('Когда оставлен отзыв', 'date', { type: 'month' }),
+          fld('Откуда отзыв', 'source', { select: REVIEW_SOURCES }),
+          fld('Оценка', 'rating', { select: [[0, 'Без звёзд'], [5, '★★★★★'], [4, '★★★★'], [3, '★★★'], [2, '★★'], [1, '★']], num: true }),
+          fld('Ссылка на оригинал', 'link', { ph: 'https://…', hint: 'необязательно: ссылка на отзыв на картах' })),
+        fld('Текст отзыва', 'text', { area: true, hint: 'Копируйте как есть, без изменений смысла. Новая строка — новый абзац.' }),
+        h('label', { class: 'row', style: 'gap:10px;cursor:pointer' }, consent, h('span', null, 'Клиент разрешил опубликовать этот отзыв на сайте')));
+    });
+    return [h('div', { class: 'row' }, h('h2', { class: 'sec', style: 'margin:0' }, 'Отзывы клиентов'), h('span', { class: 'spacer' }),
+      h('button', { class: 'btn btn--primary', onclick: function () { S.reviews.unshift({ name: '', pet: '', date: today().slice(0, 7), source: 'site', rating: 5, link: '', text: '', consent: false }); saveReviews(); render(); } }, '+ Добавить отзыв')),
+    h('p', { class: 'hint' }, 'Только настоящие отзывы и только с согласия клиента — без отметки о согласии отзыв на сайте не появится. Порядок здесь = порядок на сайте; на главной показываются первые шесть. Когда есть хотя бы один отзыв, на главной появляется блок «Что о нас говорят».'),
+    S.reviews.length ? h('div', { class: 'stack' }, cards) : h('div', { class: 'card' }, h('p', { class: 'hint', style: 'margin:0' }, 'Отзывов пока нет. Нажмите «+ Добавить отзыв».'))];
+  }
 
   // ---------------------------------------------------------------- вкладка «Фото»
   function usage(path) {
