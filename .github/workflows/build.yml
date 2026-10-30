@@ -1,0 +1,36 @@
+name: Сборка сайта
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Сборка страниц из _src
+        run: |
+          for f in *.html; do [ -f "_src/pages/$f" ] || rm -f "$f"; done
+          SITE_OUT=. python3 _src/build.py
+      - name: Копия сайта без исходников
+        run: rsync -a --exclude ".git" --exclude ".github" --exclude "_src" ./ "${{ runner.temp }}/site/"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.d.outputs.page_url }}
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4

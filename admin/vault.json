@@ -1,0 +1,10 @@
+{
+  "v": 1,
+  "kdf": "PBKDF2-SHA256",
+  "iter": 600000,
+  "salt": "wiRcPLKYUvvuIIJNCQjN5A==",
+  "iv": "ew60EQZnEgih8n3v",
+  "data": "oT4/QCgZcKIXTStRnRHkgKKT8tc1heff1RkkNBdKPKRFT6rj6ROVPLuH5bg+zcFtL/ezBtHnD2sYcaFAg5R0lJOjT6D/+x20a5wMOPZT1C8vfCUbBBjcaJ1dMU3asAk51o2OsPp/V1cVskXTCw==",
+  "repo": "vetsluzhbaspb-droid/etsluzhbaspb",
+  "branch": "main"
+}
