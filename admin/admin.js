@@ -394,6 +394,7 @@
         h('button', { class: 'btn', onclick: changesModal }, 'Изменения ', h('span', { class: 'badge', id: 'chg-count', hidden: true }, '0')),
         h('button', { class: 'btn btn--primary', id: 'pub-btn', onclick: publish, disabled: true }, 'Опубликовать'),
         h('a', { class: 'btn btn--sm', href: SITE, target: '_blank', rel: 'noopener' }, 'Сайт ↗'),
+        h('button', { class: 'btn btn--sm', onclick: passwordModal }, 'Сменить пароль'),
         h('button', { class: 'btn btn--sm', onclick: logout }, 'Выйти'))));
   }
   function statusBar() {
@@ -425,6 +426,31 @@
         h('button', { class: 'btn btn--danger', onclick: function () { if (confirm('Отменить все изменения?')) { S.changes.clear(); afterUndo(); close(); } } }, 'Отменить всё'),
         h('span', { class: 'spacer' }), h('button', { class: 'btn btn--primary', onclick: function () { close(); publish(); } }, 'Опубликовать')) : null));
     document.body.append(m);
+  }
+  // Смена пароля: тот же ключ GitHub шифруется новым паролем и сохраняется в admin/vault.json
+  function passwordModal() {
+    var p1 = h('input', { type: 'password', autocomplete: 'new-password' });
+    var p2 = h('input', { type: 'password', autocomplete: 'new-password' });
+    var msg = h('p', { class: 'err' });
+    var btn = h('button', { class: 'btn btn--primary', type: 'submit' }, 'Сохранить новый пароль');
+    var close = function () { m.remove(); };
+    var m = h('div', { class: 'modal', onclick: function (e) { if (e.target === m) close(); } }, h('div', { class: 'card' },
+      h('div', { class: 'row' }, h('h2', { class: 'sec', style: 'margin:0' }, 'Смена пароля'), h('span', { class: 'spacer' }), h('button', { class: 'btn btn--sm', onclick: close }, 'Закрыть')),
+      h('form', { style: 'margin-top:14px', onsubmit: async function (e) {
+        e.preventDefault(); msg.textContent = '';
+        if (p1.value.length < 10) { msg.textContent = 'Пароль — минимум 10 символов.'; return; }
+        if (p1.value !== p2.value) { msg.textContent = 'Пароли не совпадают.'; return; }
+        btn.disabled = true; btn.textContent = 'Сохраняю…';
+        try {
+          var vault = await seal(S.token, p1.value);
+          await commit('Админка: новый пароль', new Map([['admin/vault.json', { text: JSON.stringify(vault, null, 2) + '\n' }]]));
+          close(); toast('Пароль изменён. Через 1–2 минуты вход будет по новому паролю, старый перестанет работать.', 6000);
+        } catch (err) { msg.textContent = 'Не удалось сохранить: ' + err.message; btn.disabled = false; btn.textContent = 'Сохранить новый пароль'; }
+      } },
+        h('label', { class: 'f' }, h('span', null, 'Новый пароль (от 10 символов)'), p1),
+        h('label', { class: 'f' }, h('span', null, 'Новый пароль ещё раз'), p2),
+        msg, btn)));
+    document.body.append(m); p1.focus();
   }
   function afterUndo() {
     S.images = S.images.filter(function (x) { return !x.staged || S.changes.has(x.path); });
