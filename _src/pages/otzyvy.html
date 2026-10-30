@@ -1,0 +1,49 @@
+{"title": "Отзывы о ветеринарной службе в Санкт-Петербурге — Ветслужба СПб", "description": "Реальные отзывы владельцев о службе «Ветслужба СПб» — только с согласия авторов. Оставьте отзыв на сайте, в Яндекс Картах, Google Картах или 2ГИС.", "nav": "otzyvy", "crumbs": [["Отзывы", ""]]}
+<section class="page-hero">
+  <div class="container">
+    {{crumbs}}
+    <div class="page-hero__grid">
+      <div class="page-hero__text">
+        <span class="eyebrow">Обратная связь</span>
+        <h1>Отзывы владельцев</h1>
+        <p class="lead">Нам важно знать, как вы пережили визит и всё, что было после. Мы читаем каждое сообщение и используем его, чтобы работать бережнее.</p>
+        <div class="btn-row"><a class="btn btn--primary" href="#napisat">{{i:chat}}Оставить отзыв</a></div>
+      </div>
+      <aside class="side-card">
+        <span class="side-card__title">Правила публикации</span>
+        <ul class="check-list">
+          <li>Публикуем только с согласия автора</li>
+          <li>Не меняем смысл и не редактируем без вашего ведома</li>
+          <li>Можем указать только имя или опубликовать анонимно</li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!--if:reviews--><section class="section section--tight" id="spisok">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><h2>Опубликованные отзывы</h2><p class="muted">Здесь публикуются только реальные отзывы, которые владельцы разрешили разместить.</p></div></div>
+    <div class="grid grid-3">{{part:reviews}}</div>
+    <div class="panel review-places">
+      <h3>Оставить отзыв на картах</h3>
+      <p class="muted">Отзыв на картах помогает другим владельцам найти службу в трудный момент.</p>
+      {{part:review-links}}
+    </div>
+  </div>
+</section><!--/if:reviews-->
+
+<section class="section section--tint" id="napisat">
+  <div class="container split">
+    <div class="split__text">
+      <span class="eyebrow">Написать нам</span>
+      <h2>Расскажите, как всё прошло</h2>
+      <p class="muted">Если хотите поделиться впечатлениями или задать вопрос после визита, оставьте заявку — мы перезвоним.</p>
+    </div>
+    <div class="panel panel--tint">
+      <h3>{{i:shield}} Публикация отзывов</h3>
+      <p class="muted">Мы публикуем отзыв, только если вы отдельно разрешили это письменно и указали, под каким именем его разместить. Без такого разрешения ваши слова и имя на сайте не появятся.</p>
+      <button class="btn btn--primary" type="button" data-open="callback" data-topic="Другое">{{i:chat}}Оставить заявку</button>
+    </div>
+  </div>
+</section>

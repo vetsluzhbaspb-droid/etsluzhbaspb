@@ -24,9 +24,10 @@
 <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=20261029161535">
-<script src="assets/js/config.js?v=20261029161535" defer></script>
-<script src="assets/js/main.js?v=20261029161535" defer></script>
+<link rel="stylesheet" href="assets/css/style.css?v=20261030204603">
+<style>:root{--primary:#2866a0;--primary-2:#1c78ad;--warm:#d87578;--ink:#183b56;--heading:#143b5b;--muted:#4b6479;--tint-2:#f4faff;--bg:#ffffff;--btn-shadow:0 10px 24px #2866a038;--radius:22px;--radius-sm:14px}</style>
+<script src="assets/js/config.js?v=20261030204603" defer></script>
+<script src="assets/js/main.js?v=20261030204603" defer></script>
 
 </head>
 <body>
@@ -97,6 +98,7 @@
     <p class="footer__legal">Информация на сайте носит справочный характер и не является публичной офертой.</p>
   </div>
 </footer>
+<a class="side-call" href="tel:+78129455634" aria-label="Позвонить: +7-812-945-56-34"><span class="side-call__ico"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></span><span class="side-call__txt"><small>Позвонить</small><b>+7-812-945-56-34</b></span></a>
 <a class="fab fab--wa" href="https://wa.me/79315305026" target="_blank" rel="noopener" data-track="whatsapp_click" aria-label="Написать в WhatsApp"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg><span>WhatsApp</span></a>
 <div class="callbar"><a class="btn btn--primary" href="tel:+78129455634"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span>Позвонить</span></a><a class="btn btn--wa" href="https://wa.me/79315305026" target="_blank" rel="noopener" data-track="whatsapp_click"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg><span>WhatsApp</span></a></div>
 <button class="to-top" type="button" aria-label="Наверх"><svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button>
@@ -106,8 +108,8 @@
       <h2 class="form-card__title" id="cbm-title">Оставьте заявку</h2>
       <p>Перезвоним, спокойно всё обсудим и подберём время визита.</p>
       <div class="form-grid">
-        <div class="field"><label for="cbm-name">Имя</label><input class="input" id="cbm-name" name="name" type="text" autocomplete="name" placeholder="Как к вам обращаться"><span class="field__error"></span></div>
-        <div class="field"><label for="cbm-phone">Телефон <span class="req">*</span></label><input class="input" id="cbm-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required><span class="field__error" aria-live="polite"></span></div>
+        <div class="field"><label for="cbm-name">Имя</label><input class="input ym-disable-keys" id="cbm-name" name="name" type="text" autocomplete="name" placeholder="Как к вам обращаться"><span class="field__error"></span></div>
+        <div class="field"><label for="cbm-phone">Телефон <span class="req">*</span></label><input class="input ym-disable-keys" id="cbm-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required><span class="field__error" aria-live="polite"></span></div>
       </div>
       <input type="hidden" name="topic" value="Консультация">
       <input type="hidden" name="details" value="">

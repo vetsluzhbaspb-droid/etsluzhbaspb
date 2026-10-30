@@ -1,0 +1,61 @@
+{"title": "Контакты ветеринарной службы в Санкт-Петербурге — Ветслужба СПб", "description": "Телефон, WhatsApp, Telegram, e-mail, часы работы и зона выезда ветеринарной службы «Ветслужба СПб». Форма заявки — перезвоним и согласуем визит.", "nav": "kontakty", "crumbs": [["Контакты", ""]], "type": "ContactPage"}
+<section class="page-hero">
+  <div class="container">
+    {{crumbs}}
+    <div class="page-hero__grid">
+      <div class="page-hero__text">
+        <span class="eyebrow">Связь со службой</span>
+        <h1>Контакты</h1>
+        <!--if:phone--><p class="lead">Позвоните, если нужно быстро. Напишите в мессенджер или оставьте заявку, если удобнее, чтобы перезвонили мы.</p><!--/if:phone--><!--if:nophone--><p class="lead">Оставьте заявку — перезвоним, ответим на вопросы и согласуем время визита. Работаем {{d:hours-lower}}.</p><!--/if:nophone-->
+        {{part:contact-buttons}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="nap">
+  <div class="container">
+    <div class="nap">
+<!--if:phone-->      <div class="nap__item">
+        <span class="card__ico">{{i:phone}}</span>
+        <div><h2 class="h-card">Телефон</h2><p class="nap__value">{{d:phone}}</p><p class="muted">{{d:hours}}</p></div>
+      </div><!--/if:phone-->
+<!--if:messengers-->      <div class="nap__item">
+        <span class="card__ico">{{i:whatsapp}}</span>
+        <div><h2 class="h-card">Мессенджеры</h2><div class="nap__value">{{d:messengers}}</div><p class="muted">Ответим в рабочее время.</p></div>
+      </div><!--/if:messengers-->
+<!--if:email-->      <div class="nap__item">
+        <span class="card__ico">{{i:mail}}</span>
+        <div><h2 class="h-card">Электронная почта</h2><p class="nap__value">{{d:email}}</p><p class="muted">Для вопросов, которые не требуют срочного ответа, и для документов.</p></div>
+      </div><!--/if:email-->
+      <div class="nap__item">
+        <span class="card__ico">{{i:map}}</span>
+        <div><h2 class="h-card">Где работаем</h2><p class="nap__value">{{d:area}}</p><p class="muted">Адрес: {{d:address}}</p><a class="link-arrow" href="zona.html">Зона выезда и доплаты{{i:arrow-right}}</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint" id="zayavka">
+  <div class="container split">
+    <div class="split__text">
+      <span class="eyebrow">Чтобы ответить быстрее</span>
+      <h2>Что удобно сообщить сразу</h2>
+      <p class="muted">Если трудно говорить, не беспокойтесь о подробностях — оператор сам задаст нужные вопросы.</p>
+      <ul class="check-list">
+        <li>Вид, возраст и примерный вес питомца</li>
+        <li>Район или адрес</li>
+        <li>Что нужно: консультация, визит врача или вывоз и кремация</li>
+        <li>Удобное время визита</li>
+      </ul>
+    </div>
+    {{part:form-contacts}}
+  </div>
+</section>
+
+<section class="section" id="voprosy">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><h2>Вопросы о связи</h2></div></div>
+    {{faq:kontakt-konsult,noch,kontakt-registr,kontakt-dannye}}
+  </div>
+</section>

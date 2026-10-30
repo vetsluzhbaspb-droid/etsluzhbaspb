@@ -1,0 +1,13 @@
+{
+  "textScale": 100,
+  "headingScale": 100,
+  "radius": 22,
+  "primary": "#2866a0",
+  "primary2": "#1c78ad",
+  "accent": "#d87578",
+  "text": "#183b56",
+  "heading": "#143b5b",
+  "muted": "#4b6479",
+  "tint": "#f4faff",
+  "bg": "#ffffff"
+}

@@ -33,8 +33,8 @@
     if (A.metrika) {
       window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); };
       window.ym.l = Date.now();
-      loadScript("https://mc.yandex.ru/metrika/tag.js");
-      window.ym(Number(A.metrika), "init", { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: false });
+      loadScript("https://mc.yandex.ru/metrika/tag.js?id=" + Number(A.metrika));
+      window.ym(Number(A.metrika), "init", { ssr: true, webvisor: true, clickmap: true, ecommerce: "dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce: true, trackLinks: true });
     }
   }
   function getConsent() { try { return localStorage.getItem("ms-consent"); } catch (e) { return null; } }
@@ -592,6 +592,15 @@
     window.addEventListener("load", function () { el.scrollIntoView({ block: "start" }); });
   }
 
+  // Плашка «Позвонить» сбоку: показываем, когда посетитель прокрутил страницу и прошло 5 секунд
+  function initSideCall() {
+    var b = $(".side-call");
+    if (!b) return;
+    var timeOk = false, scrolled = false;
+    function check() { if (timeOk && scrolled) b.classList.add("is-visible"); }
+    setTimeout(function () { timeOk = true; check(); }, 5000);
+    window.addEventListener("scroll", function () { if (window.scrollY > 200) { scrolled = true; check(); } }, { passive: true });
+  }
   function start() {
     initAnalytics();
     initHeader();
@@ -602,6 +611,7 @@
     initModals();
     initSearch();
     initToTop();
+    initSideCall();
     initSubnav();
     initFilters();
     initHash();

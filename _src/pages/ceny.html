@@ -1,0 +1,77 @@
+{"title": "Цены на усыпление и кремацию животных в СПб — Ветслужба СПб", "description": "Цены на усыпление животных на дому, общую и индивидуальную кремацию в Санкт-Петербурге по виду и весу питомца. Что оплачивается отдельно и калькулятор.", "nav": "ceny", "crumbs": [["Цены", ""]], "service": {"name": "Усыпление и кремация животных: цены", "serviceType": "Эвтаназия и кремация животных", "description": "Прайс на усыпление животных на дому, общую и индивидуальную кремацию, вывоз тела, урны и доставку праха.", "priceKeys": ["euth", "common", "individual", "pickup", "urn", "delivery", "report"]}}
+<section class="page-hero">
+  <div class="container">
+    {{crumbs}}
+    <div class="page-hero__grid">
+      <div class="page-hero__text">
+        <span class="eyebrow">Прайс и калькулятор</span>
+        <h1>Цены на усыпление и кремацию животных{{cityIn}}</h1>
+        <p class="lead">Стоимость зависит от вида и веса питомца, выбранных услуг и адреса. Всё, что оплачивается отдельно, перечислено ниже.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#prajs">{{i:doc}}Смотреть прайс</a>
+          <a class="btn" href="#kalkulyator">{{i:calc}}Узнать точную цену</a>
+        </div>
+        <p class="hero__note">{{i:shield}} Окончательную сумму согласуем до начала работы.</p>
+      </div>
+      <aside class="side-card">
+        <span class="side-card__title">Базовые тарифы</span>
+        <div class="tariff"><span class="tariff__ico">{{i:steth}}</span><span class="tariff__name">Усыпление на дому<small>Осмотр и процедура</small></span><span class="tariff__price">{{price:euth}}</span></div>
+        <div class="tariff"><span class="tariff__ico">{{i:flame}}</span><span class="tariff__name">Общая кремация<small>Без возврата праха</small></span><span class="tariff__price">{{price:common}}</span></div>
+        <div class="tariff"><span class="tariff__ico">{{i:urn}}</span><span class="tariff__name">Индивидуальная кремация<small>С возвратом праха</small></span><span class="tariff__price">{{price:individual}}</span></div>
+        <p class="small muted">Минимальная цена — для самой лёгкой весовой категории. Выезд за город, урна и доставка — отдельно.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<nav class="subnav" aria-label="Разделы страницы">
+  <div class="container subnav__inner">
+    <a href="#prajs">Прайс по питомцам</a>
+    <a href="#otdelno">Что оплачивается отдельно</a>
+    <a href="#kalkulyator">Калькулятор</a>
+    <a href="#formaty">Форматы</a>
+    <a href="#voprosy">Вопросы о ценах</a>
+    <a class="subnav__cta" href="#svyaz">Уточнить стоимость</a>
+  </div>
+</nav>
+
+{{part:prices}}
+
+<section class="section section--tint" id="otdelno">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><span class="eyebrow">Дополнительно</span><h2>Что оплачивается отдельно</h2><p class="lead">Эти услуги добавляются, только если вы их выберете. Их стоимость называем заранее.</p></div></div>
+    <div class="grid grid-4">
+      <div class="card"><span class="card__ico">{{i:truck}}</span><h3>Вывоз тела</h3><p>{{price:pickup}}. Если питомец умер дома или в клинике. <a href="vyvoz.html">Подробнее</a>.</p></div>
+      <div class="card"><span class="card__ico">{{i:urn}}</span><h3>Урна</h3><p>{{price:urn}}. Модели — на странице <a href="kremaciya.html#urny">кремации</a>.</p></div>
+      <div class="card"><span class="card__ico">{{i:route}}</span><h3>Доставка урны</h3><p>Стоимость: {{price:delivery}}. Время согласуем с вами.</p></div>
+      <div class="card"><span class="card__ico">{{i:map}}</span><h3>Выезд за город</h3><p>Доплата зависит от зоны. <a href="zona.html">Смотреть зоны</a>.</p></div>
+    </div>
+  </div>
+</section>
+
+{{part:calc}}
+
+<section class="section section--tint" id="formaty">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><span class="eyebrow">Что входит</span><h2>Два формата кремации — разный состав</h2></div></div>
+    <div class="grid grid-2">
+      <div class="panel">
+        <h3>{{i:urn}} Индивидуальная кремация</h3>
+        <ul class="check-list"><li>Отдельная кремация питомца</li><li>Прах в урне</li><li>По желанию — фото- и видеоотчёт</li><li>По желанию — доставка урны</li></ul>
+      </div>
+      <div class="panel">
+        <h3>{{i:flame}} Общая кремация</h3>
+        <ul class="check-list"><li>Кремация вместе с другими животными</li><li>Прах не возвращается</li><li>Можно заказать вместе с вывозом тела</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="voprosy">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><h2>Вопросы о ценах и расчёте</h2></div><a class="link-arrow" href="faq.html">Все вопросы{{i:arrow-right}}</a></div>
+    {{faq:cena,noch,format,dokumenty}}
+  </div>
+</section>
+
+{{part:cta}}

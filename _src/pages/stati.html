@@ -1,0 +1,32 @@
+{"title": "Полезная информация для владельцев — Ветслужба СПб", "description": "Памятки для владельцев животных: подготовка к визиту врача, выбор формата кремации, что делать, если питомец умер дома, как пережить утрату.", "nav": "stati", "crumbs": [["Полезное", ""]]}
+<section class="page-hero">
+  <div class="container">
+    {{crumbs}}
+    <div class="page-hero__grid">
+      <div class="page-hero__text">
+        <span class="eyebrow">Памятки владельцу</span>
+        <h1>Полезная информация</h1>
+        <p class="lead">Короткие и понятные материалы о том, что делать до визита врача, как выбрать формат кремации и как поддержать себя после утраты.</p>
+      </div>
+      <aside class="side-card">
+        <span class="side-card__title">Не нашли ответ?</span>
+        <p class="muted small">Посмотрите раздел вопросов или позвоните — объясним по телефону.</p>
+        <a class="link-arrow" href="faq.html">Вопросы и ответы{{i:arrow-right}}</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="filter-row" role="group" aria-label="Фильтр по темам">
+      <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">Все темы</button>
+      <button class="filter-btn" type="button" data-filter="pered" aria-pressed="false">Перед визитом</button>
+      <button class="filter-btn" type="button" data-filter="kremaciya" aria-pressed="false">Кремация</button>
+      <button class="filter-btn" type="button" data-filter="posle" aria-pressed="false">После утраты</button>
+    </div>
+    <div class="grid grid-2">{{part:articles-all}}</div>
+  </div>
+</section>
+
+{{part:cta}}

@@ -2,5 +2,6 @@
 User-agent: *
 Allow: /
 Disallow: /404.html
+Disallow: /admin/
 
 Sitemap: https://vetsluzhbaspb.com/sitemap.xml

@@ -1,0 +1,76 @@
+{"title": "Вывоз тела животного на кремацию в СПб — Ветслужба СПб", "description": "Вывоз умершего питомца из дома или ветклиники на кремацию{cityIn}. Что сделать до приезда, как проходит вывоз, общая и индивидуальная кремация, цены.", "nav": "kremaciya", "crumbs": [["Кремация животных", "kremaciya.html"], ["Вывоз тела", ""]], "service": {"name": "Вывоз тела животного на кремацию", "serviceType": "Вывоз умерших животных", "description": "Вывоз тела умершего домашнего животного из дома или ветеринарной клиники на общую или индивидуальную кремацию.", "priceKeys": ["pickup", "common", "individual"]}}
+<section class="page-hero">
+  <div class="container">
+    {{crumbs}}
+    <div class="page-hero__grid">
+      <div class="page-hero__text">
+        <span class="eyebrow">Если питомец умер · {{d:area-short}}</span>
+        <h1>Вывоз тела животного на кремацию{{cityIn}}</h1>
+        <p class="lead">Если питомец умер дома или в клинике, позвоните или оставьте заявку. Приедем по адресу, заберём питомца и организуем общую или индивидуальную кремацию. Визит врача для этого не нужен.</p>
+        <div class="btn-row">
+          <button class="btn btn--primary" type="button" data-open="callback" data-topic="Вывоз тела">{{i:truck}}Заказать вывоз</button>
+          <a class="btn" href="#pervye-chasy">{{i:book}}Что сделать сейчас</a>
+        </div>
+        {{contactline}}
+      </div>
+      <aside class="side-card">
+        <span class="side-card__title">Стоимость</span>
+        <div class="tariff"><span class="tariff__ico">{{i:truck}}</span><span class="tariff__name">Вывоз тела<small>Из дома или клиники</small></span><span class="tariff__price">{{price:pickup}}</span></div>
+        <div class="tariff"><span class="tariff__ico">{{i:flame}}</span><span class="tariff__name">Общая кремация<small>Без возврата праха</small></span><span class="tariff__price">{{price:common}}</span></div>
+        <div class="tariff"><span class="tariff__ico">{{i:urn}}</span><span class="tariff__name">Индивидуальная<small>С возвратом праха</small></span><span class="tariff__price">{{price:individual}}</span></div>
+        <a class="link-arrow" href="ceny.html#prajs">Полный прайс{{i:arrow-right}}</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pervye-chasy">
+  <div class="container split">
+    <div class="split__text">
+      <span class="eyebrow">Пока ждёте специалиста</span>
+      <h2>Что сделать в первые часы</h2>
+      <p class="muted">Не нужно делать всё идеально. Если сомневаетесь, позвоните — подскажем.</p>
+      <a class="link-arrow" href="stati-pitomec-umer.html">Подробная памятка{{i:arrow-right}}</a>
+    </div>
+    <div class="panel">
+      <ul class="check-list">
+        <li>Положите питомца на бок, на пелёнку или полотенце</li>
+        <li>Накройте тканью и перенесите в самое прохладное место в доме</li>
+        <li>Уберите питомца подальше от батарей и солнца</li>
+        <li>Если хотите что-то сохранить на память — ошейник, прядь шерсти — сделайте это сейчас</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint" id="kak">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><span class="eyebrow">Порядок</span><h2>Как проходит вывоз</h2></div></div>
+    <ol class="steps">
+      <li class="step"><span class="step__num">1</span><h3>Звонок или заявка</h3><p>Назовите вид и примерный вес питомца, адрес и удобное время.</p></li>
+      <li class="step"><span class="step__num">2</span><h3>Формат кремации</h3><p>Общая или индивидуальная. Если ещё не решили — обсудим.</p></li>
+      <li class="step"><span class="step__num">3</span><h3>Стоимость</h3><p>Называем её до выезда, с учётом зоны и выбранных услуг.</p></li>
+      <li class="step"><span class="step__num">4</span><h3>Приезд</h3><p>Специалист приезжает по адресу и забирает питомца.</p></li>
+      <li class="step"><span class="step__num">5</span><h3>Кремация и урна</h3><p>При индивидуальной кремации прах возвращается вам в урне.</p></li>
+    </ol>
+    {{cta:Нужно организовать вывоз? Оставьте заявку — перезвоним и согласуем время.}}
+  </div>
+</section>
+
+<section class="section" id="otkuda">
+  <div class="container grid grid-2">
+    <div class="card"><span class="card__ico">{{i:home}}</span><h3>Из дома</h3><p>Из квартиры или частного дома в пределах зоны выезда. Предупредите о домофоне, этаже и наличии лифта.</p></div>
+    <div class="card"><span class="card__ico">{{i:steth}}</span><h3>Из ветклиники</h3><p>Если питомец умер в клинике, договоримся о времени и заберём его оттуда. Назовите адрес и название клиники.</p></div>
+  </div>
+</section>
+
+{{part:prices-cremation}}
+
+<section class="section" id="voprosy">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><h2>Вопросы о вывозе</h2></div><a class="link-arrow" href="faq.html">Все вопросы{{i:arrow-right}}</a></div>
+    {{faq:umer,noch,rayon,format,prah,dokumenty}}
+  </div>
+</section>
+
+{{part:cta}}

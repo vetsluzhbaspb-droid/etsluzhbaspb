@@ -1,0 +1,34 @@
+{"title": "Зона выезда ветеринара{cityIn} — Ветслужба СПб", "description": "Куда выезжает ветеринарный врач службы «Ветслужба СПб»{cityIn}: районы города и пригороды, доплаты по зонам, как согласовать время визита.", "nav": "zona", "crumbs": [["Зона выезда", ""]]}
+<section class="page-hero">
+  <div class="container">
+    {{crumbs}}
+    {{part:zone-h1}}
+  </div>
+</section>
+
+<section class="section" id="soglasovanie">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><span class="eyebrow">Перед визитом</span><h2>Как согласовать выезд</h2></div></div>
+    <div class="grid grid-3">
+      <div class="card"><span class="card__ico">{{i:phone}}</span><h3>Позвоните или оставьте заявку</h3><p>Назовите адрес, вид и примерный вес питомца.</p></div>
+      <div class="card"><span class="card__ico">{{i:clock}}</span><h3>Узнайте время приезда</h3><p>Оператор скажет, когда врач сможет быть у вас, и назовёт доплату за выезд, если она нужна.</p></div>
+      <div class="card"><span class="card__ico">{{i:home}}</span><h3>Встретьте врача</h3><p>Предупредите о домофоне, парковке или особенностях подъезда.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint" id="rayony">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><span class="eyebrow">Районы и населённые пункты</span><h2>Где мы работаем</h2><p class="lead">Если вашего района нет в списке, позвоните — уточним возможность выезда.</p></div></div>
+    {{part:districts}}
+  </div>
+</section>
+
+<section class="section" id="voprosy">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><h2>Вопросы о выезде</h2></div></div>
+    {{faq:rayon,noch,kvartira,cena}}
+  </div>
+</section>
+
+{{part:cta}}
