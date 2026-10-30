@@ -208,7 +208,7 @@ NAV = [
      "promo": ("Питомец умер дома?", "Что сделать в первые часы и как организовать вывоз на кремацию.", [("vyvoz.html", "Вывоз тела"), ("stati-pitomec-umer.html", "Памятка")])},
     {"id": "ceny", "label": "Цены", "href": "ceny.html",
      "cols": [("Стоимость", [("doc", "Прайс по видам и весу", "ceny.html#prajs"), ("info", "Что оплачивается отдельно", "ceny.html#otdelno"), ("calc", "Калькулятор стоимости", "ceny.html#kalkulyator"), ("chat", "Вопросы о ценах", "ceny.html#voprosy")])],
-     "promo": ("Точная сумма — до начала работы", "Оператор назовёт стоимость по телефону, врач подтвердит её на месте до процедуры.", [("kontakty.html", "Связаться")])},
+     "promo": ("Понятный состав услуг", "Окончательную стоимость ветеринар согласует до начала помощи.", [("tel", "Уточнить условия")])},
     {"id": "o-nas", "label": "О службе", "href": "o-nas.html",
      "cols": [("Служба", [("heart", "Коротко о нас", "o-nas.html#fakty"), ("steth", "Врачи", "o-nas.html#vrachi"), ("shield", "Как мы работаем", "o-nas.html#rabota"), ("map", "Зона выезда", "zona.html")]),
               ("Связь", [("star", "Отзывы", "otzyvy.html"), ("phone", "Контакты", "kontakty.html"), ("lock", "Конфиденциальность", "privacy.html")])],
@@ -247,7 +247,11 @@ def desktop_nav(active):
             cols += f'<div class="mega__col"><p class="mega__title">{title}</p><ul>{lis}</ul></div>'
         if n.get("promo"):
             t, p, links = n["promo"]
-            btns = "".join(f'<a class="link-arrow" href="{h}">{l}{icon("arrow-right")}</a>' for h, l in links)
+            btns = "".join(
+                (f'<a class="btn btn--primary mega__btn" href="tel:{PHONE_HREF}">{icon("phone")}{l}</a>' if PHONE_HREF
+                 else f'<a class="btn btn--primary mega__btn" href="kontakty.html">{icon("phone")}{l}</a>')
+                if h == "tel" else f'<a class="link-arrow" href="{h}">{l}{icon("arrow-right")}</a>'
+                for h, l in links)
             cols += f'<div class="mega__promo"><strong>{t}</strong><p>{p}</p>{btns}</div>'
         else:
             cols += f'<div class="mega__col"><p class="mega__title">Раздел</p><ul><li><a href="{n["href"]}">{icon("arrow-right")}Весь раздел «{n["label"]}»</a></li></ul></div>'

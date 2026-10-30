@@ -178,6 +178,8 @@ a.chip:hover { border-color: var(--primary); color: var(--primary); }
 .mega__col a .icon { color: var(--primary); width: 18px; height: 18px; }
 .mega__promo { background: var(--tint); border-radius: var(--radius-sm); padding: 20px; display: grid; gap: 10px; align-content: start; }
 .mega__promo p { color: var(--muted); font-size: 0.9rem; }
+.mega__promo strong { font-size: 1.15rem; color: var(--heading); }
+.mega__btn { justify-self: start; margin-top: 6px; }
 .nav-backdrop { position: fixed; inset: 0; z-index: 50; background: var(--overlay); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s; }
 .nav-backdrop.is-visible { opacity: 1; visibility: visible; }
 
