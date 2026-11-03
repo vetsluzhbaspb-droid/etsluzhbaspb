@@ -866,3 +866,15 @@ form[data-form] :disabled { cursor: not-allowed; opacity: .6; }
 .review--real .review__text { color: var(--ink); }
 .review__text p { margin: 0; } .review__text p + p { margin-top: 8px; }
 a.review__tag { text-decoration: none; }
+
+/* Прайс ветеринара на дому */
+.vet-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.vet-card { background: var(--bg, #fff); border: 1px solid var(--line, #dfe8ef); border-radius: var(--radius-sm, 16px); padding: 20px 22px; }
+.vet-card h3 { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; margin: 0 0 8px; }
+.vet-card h3 .icon { width: 1.3em; height: 1.3em; color: var(--primary); }
+.vet-card ul { list-style: none; margin: 0; padding: 0; }
+.vet-card li { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 9px 0; border-top: 1px dashed var(--line, #dfe8ef); }
+.vet-card li:first-child { border-top: 0; }
+.vet-card li small { display: block; color: var(--muted); font-size: 0.8rem; }
+.vet-card li b { white-space: nowrap; color: var(--heading); }
+@media (max-width: 760px) { .vet-prices { grid-template-columns: 1fr; } .vet-card { padding: 16px; } }

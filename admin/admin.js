@@ -564,6 +564,18 @@
           h('td', null, txtInput(function () { return s.note; }, function (v) { s.note = v; })),
           h('td', null, numInput(function () { return s.price; }, function (v) { s.price = v; })));
       })));
+    var VET = S.site.vet || [];
+    var vet = VET.map(function (g) {
+      return h('div', { class: 'card scroll-x' },
+        h('p', null, h('b', null, txtInput(function () { return g.label; }, function (v) { g.label = v; }))),
+        h('table', { class: 'tbl' },
+          h('thead', null, h('tr', null, h('th', null, 'Услуга'), h('th', null, 'Пояснение'), h('th', null, 'Цена от, ₽'))),
+          h('tbody', null, (g.items || []).map(function (it) {
+            return h('tr', null, h('td', null, txtInput(function () { return it.label; }, function (v) { it.label = v; })),
+              h('td', null, txtInput(function () { return it.note; }, function (v) { it.note = v; })),
+              h('td', null, numInput(function () { return it.price; }, function (v) { it.price = v; })));
+          }))));
+    });
     var zn = h('table', { class: 'tbl' },
       h('thead', null, h('tr', null, h('th', null, 'Зона'), h('th', null, 'Пояснение'), h('th', null, 'Доплата, ₽'))),
       h('tbody', null, Z.map(function (z) {
@@ -577,7 +589,7 @@
       h('h2', { class: 'sec' }, 'Названия весовых категорий'), h('div', { class: 'card scroll-x' }, wts),
       h('h2', { class: 'sec' }, 'Дополнительные услуги'), h('div', { class: 'card scroll-x' }, ex),
       h('h2', { class: 'sec' }, 'Выезд за город'), h('div', { class: 'card scroll-x' }, zn)
-    ];
+    ].concat(VET.length ? [h('h2', { class: 'sec' }, 'Ветеринар на дом')].concat(vet) : []);
   }
 
   // ---------------------------------------------------------------- разбор страницы

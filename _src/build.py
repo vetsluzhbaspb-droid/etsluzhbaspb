@@ -206,8 +206,11 @@ NAV = [
      "cols": [("Форматы", [("urn", "Индивидуальная кремация", "kremaciya.html#individualnaya"), ("flame", "Общая кремация", "kremaciya.html#obshchaya"), ("doc", "Сравнение форматов", "kremaciya.html#sravnenie"), ("cat", "Кремация кошки", "kremaciya-koshek.html"), ("dog", "Кремация собаки", "kremaciya-sobak.html")]),
               ("Сопутствующие услуги", [("truck", "Вывоз тела животного", "vyvoz.html"), ("urn", "Урны для праха", "kremaciya.html#urny"), ("route", "Доставка урны", "kremaciya.html#urny"), ("camera", "Фото- и видеоотчёт", "kremaciya.html#otchet")])],
      "promo": ("Питомец умер дома?", "Что сделать в первые часы и как организовать вывоз на кремацию.", [("vyvoz.html", "Вывоз тела"), ("stati-pitomec-umer.html", "Памятка")])},
+    {"id": "veterinar", "label": "Ветеринар", "href": "veterinar-na-dom.html",
+     "cols": [("Услуги на дому", [("steth", "Осмотр и лечение", "veterinar-na-dom.html#lechenie"), ("shield", "Вакцинация и профилактика", "veterinar-na-dom.html#profilaktika"), ("hand", "Операции на дому", "veterinar-na-dom.html#operacii"), ("leaf", "Зубы и восстановление", "veterinar-na-dom.html#zuby")])],
+     "promo": ("Ветеринар на дом", "Врач приедет к вам: осмотр, лечение, прививки и операции без поездки в клинику.", [("veterinar-na-dom.html#ceny-vet", "Цены"), ("tel", "Вызвать врача")])},
     {"id": "ceny", "label": "Цены", "href": "ceny.html",
-     "cols": [("Стоимость", [("doc", "Прайс по видам и весу", "ceny.html#prajs"), ("info", "Что оплачивается отдельно", "ceny.html#otdelno"), ("calc", "Калькулятор стоимости", "ceny.html#kalkulyator"), ("chat", "Вопросы о ценах", "ceny.html#voprosy")])],
+     "cols": [("Стоимость", [("doc", "Прайс по видам и весу", "ceny.html#prajs"), ("info", "Что оплачивается отдельно", "ceny.html#otdelno"), ("calc", "Калькулятор стоимости", "ceny.html#kalkulyator"), ("steth", "Ветеринар на дом", "ceny.html#ceny-vet"), ("chat", "Вопросы о ценах", "ceny.html#voprosy")])],
      "promo": ("Понятный состав услуг", "Окончательную стоимость ветеринар согласует до начала помощи.", [("tel", "Уточнить условия")])},
     {"id": "o-nas", "label": "О службе", "href": "o-nas.html",
      "cols": [("Служба", [("heart", "Коротко о нас", "o-nas.html#fakty"), ("steth", "Врачи", "o-nas.html#vrachi"), ("shield", "Как мы работаем", "o-nas.html#rabota"), ("map", "Зона выезда", "zona.html")]),
@@ -316,7 +319,7 @@ def header(active):
 
 
 FOOTER_COLS = [
-    ("Услуги", [("Усыпление на дому", "usyplenie.html"), ("Усыпление кошек", "usyplenie-koshek.html"), ("Усыпление собак", "usyplenie-sobak.html"), ("Кремация животных", "kremaciya.html"), ("Кремация кошек", "kremaciya-koshek.html"), ("Кремация собак", "kremaciya-sobak.html"), ("Вывоз тела", "vyvoz.html"), ("Урны для праха", "kremaciya.html#urny")]),
+    ("Услуги", [("Усыпление на дому", "usyplenie.html"), ("Усыпление кошек", "usyplenie-koshek.html"), ("Усыпление собак", "usyplenie-sobak.html"), ("Кремация животных", "kremaciya.html"), ("Кремация кошек", "kremaciya-koshek.html"), ("Кремация собак", "kremaciya-sobak.html"), ("Вывоз тела", "vyvoz.html"), ("Урны для праха", "kremaciya.html#urny"), ("Ветеринар на дом", "veterinar-na-dom.html")]),
     ("Служба", [("О службе", "o-nas.html")] + ([] if HIDE_EMPTY else [("Врачи", "o-nas.html#vrachi")]) + [("Цены", "ceny.html"), ("Калькулятор", "ceny.html#kalkulyator"), ("Зона выезда", "zona.html"), ("Отзывы", "otzyvy.html")]),
     ("Информация", [("Полезное", "stati.html"), ("Вопросы и ответы", "faq.html"), ("Контакты", "kontakty.html"), ("Обработка данных", "privacy.html"), ("Согласие на обработку", "soglasie.html")]),
 ]
@@ -379,7 +382,7 @@ def footer():
 # --------------------------------------------------------------------------
 # Формы
 # --------------------------------------------------------------------------
-SERVICES_SELECT = ["Консультация", "Усыпление на дому", "Вывоз тела", "Индивидуальная кремация", "Общая кремация", "Узнать цену", "Другое"]
+SERVICES_SELECT = ["Консультация", "Ветеринар на дом", "Усыпление на дому", "Вывоз тела", "Индивидуальная кремация", "Общая кремация", "Узнать цену", "Другое"]
 TIMES = ["Как можно скорее", "Сегодня", "Завтра", "Другое время — обсудим по телефону"]
 
 
@@ -541,6 +544,29 @@ def prices_panel(title="Цена зависит от вида и веса пит
     </div>
   </div>
 </section>'''
+
+
+def vet_prices(title="Цены на услуги ветеринара на дому", sub="Цена «от» — для небольшого питомца и простого случая. Точную сумму врач назовёт после осмотра, до начала работы.", id_="ceny-vet"):
+    groups = D.get("vet") or []
+    cards = ""
+    for g in groups:
+        rows = ""
+        for it in g["items"]:
+            note = f'<small>{html.escape(it["note"])}</small>' if it.get("note") else ""
+            rows += f'<li><span>{html.escape(it["label"])}{note}</span><b>{price_cell(it.get("price"))}</b></li>'
+        cards += f'<div class="vet-card" id="vet-{g["id"]}"><h3>{icon(g.get("icon") or "steth")}{html.escape(g["label"])}</h3><ul>{rows}</ul></div>'
+    return f'''<section class="section" id="{id_}">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><span class="eyebrow">Прайс</span><h2>{title}</h2><p class="muted">{sub}</p></div></div>
+    <div class="vet-prices">{cards}</div>
+    <p class="prices-note">Стоимость препаратов и расходных материалов назовём заранее. Выезд за КАД — доплата по <a href="zona.html">зоне</a>.</p>
+  </div>
+</section>'''
+
+
+def vet_min(gid=None):
+    vals = [it["price"] for g in (D.get("vet") or []) if gid in (None, g["id"]) for it in g["items"] if isinstance(it.get("price"), (int, float)) and it["price"] > 0]
+    return ("от " + rub(min(vals))) if vals else tok("PRICE")
 
 
 def team_cards(n=4):
@@ -896,6 +922,7 @@ PARTS = {
     "prices-cremation-cat": lambda: prices_panel(title="Цены на кремацию кошки", sub="Общая и индивидуальная кремация в зависимости от веса. Вывоз, урна и доставка — отдельно.", mode="cremation", group="cat", id_="ceny-kremaciya-koshki"),
     "prices-cremation-dog": lambda: prices_panel(title="Цены на кремацию собаки", sub="Общая и индивидуальная кремация в зависимости от веса собаки. Вывоз, урна и доставка — отдельно.", mode="cremation", group="dog", id_="ceny-kremaciya-sobaki"),
     "prices-dog": lambda: prices_panel(title="Цены для собак", sub="Усыпление на дому и кремация в зависимости от веса собаки.", group="dog", id_="ceny-sobaki"),
+    "prices-vet": lambda: vet_prices(),
     "team": team_cards,
     "articles3": lambda: article_cards(),
     "articles-all": lambda: article_cards(ARTICLES, with_cat=True),
@@ -935,6 +962,7 @@ def render(text, meta, ctx):
     text = re.sub(r"\[ADD REAL ([A-Z ]+)\]", lambda m: tok(m.group(1)), text)
     text = re.sub(r"\{\{i:([a-z0-9-]+)\}\}", lambda m: icon(m.group(1)), text)
     text = re.sub(r"\{\{d:([a-z-]+)\}\}", lambda m: dval(m.group(1)), text)
+    text = re.sub(r"\{\{vetprice:([a-z]*)\}\}", lambda m: vet_min(m.group(1) or None), text)
     text = re.sub(r"\{\{price:([a-z]+)\}\}", lambda m: price_from(m.group(1)), text)
     text = re.sub(r"\{\{prices:([a-z]+):([a-z]+)\}\}", lambda m: price_tables(m.group(1), m.group(2)), text)
     text = re.sub(r"\{\{cta:([^}]+)\}\}", lambda m: cta_strip(m.group(1)), text)

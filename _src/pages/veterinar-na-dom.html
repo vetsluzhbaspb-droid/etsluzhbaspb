@@ -1,0 +1,53 @@
+{"title": "Ветеринар на дом в СПб — осмотр, прививки, операции | Ветслужба СПб", "description": "Вызов ветеринара на дом в Санкт-Петербурге: осмотр и лечение, капельницы, вакцинация, обработка от паразитов, стерилизация и кастрация, чистка зубов, снятие швов. Цены «от».", "nav": "veterinar", "crumbs": [["Ветеринар на дом", ""]], "service": {"name": "Ветеринар на дом", "serviceType": "Выезд ветеринарного врача на дом", "description": "Выезд ветеринарного врача на дом в Санкт-Петербурге: осмотр, лечение, вакцинация, профилактика, операции, стоматология и реабилитация.", "priceKeys": []}}
+<section class="page-hero">
+  <div class="container">
+    {{crumbs}}
+    <div class="page-hero__grid">
+      <div class="page-hero__text">
+        <span class="eyebrow">Выезд на дом · {{d:area-short}}</span>
+        <h1>Ветеринар на дом{{cityIn}}</h1>
+        <p class="lead">Осмотр, лечение, прививки, операции и уход после них — у вас дома. Питомцу не нужна переноска, дорога и очередь в клинике.</p>
+        <div class="btn-row">
+          <button class="btn btn--primary" type="button" data-open="callback" data-topic="Ветеринар на дом">{{i:chat}}Вызвать врача</button>
+          <a class="btn" href="#ceny-vet">{{i:doc}}Цены</a>
+        </div>
+        {{contactline}}
+      </div>
+      <aside class="side-card">
+        <span class="side-card__title">Базовые цены</span>
+        <div class="tariff"><span class="tariff__ico">{{i:steth}}</span><span class="tariff__name">Осмотр и лечение<small>Вызов, осмотр, уколы, капельницы</small></span><span class="tariff__price">{{vetprice:lechenie}}</span></div>
+        <div class="tariff"><span class="tariff__ico">{{i:shield}}</span><span class="tariff__name">Профилактика<small>Прививки, обработка от паразитов</small></span><span class="tariff__price">{{vetprice:profilaktika}}</span></div>
+        <div class="tariff"><span class="tariff__ico">{{i:hand}}</span><span class="tariff__name">Операции<small>Стерилизация и кастрация</small></span><span class="tariff__price">{{vetprice:operacii}}</span></div>
+        <p class="small muted">Точную сумму врач называет до начала работы.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint" id="uslugi">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><span class="eyebrow">Что делаем на выезде</span><h2>Услуги ветеринара на дому</h2></div></div>
+    <div class="grid grid-4">
+      <div class="card" id="lechenie"><span class="card__ico">{{i:steth}}</span><h3>Осмотр и лечение</h3><p>Врач осмотрит питомца, назначит лечение, сделает уколы или поставит капельницу.</p></div>
+      <div class="card" id="profilaktika"><span class="card__ico">{{i:shield}}</span><h3>Вакцинация и профилактика</h3><p>Прививки по возрасту, обработка от блох, клещей и глистов, советы по уходу и питанию.</p></div>
+      <div class="card" id="operacii"><span class="card__ico">{{i:hand}}</span><h3>Операции на дому</h3><p>Стерилизация и кастрация кошек, котов и собак — без перевозки до и после операции.</p></div>
+      <div class="card" id="zuby"><span class="card__ico">{{i:leaf}}</span><h3>Зубы и восстановление</h3><p>Чистка зубов, удаление зуба, обработка швов, перевязки и восстановление после травм.</p></div>
+    </div>
+  </div>
+</section>
+
+{{part:prices-vet}}
+
+<section class="section section--tint" id="vizit">
+  <div class="container">
+    <div class="section-head"><div class="section-head__text"><span class="eyebrow">Шаг за шагом</span><h2>Как проходит вызов</h2></div></div>
+    <ol class="steps">
+      <li class="step"><span class="step__num">1</span><h3>Заявка</h3><p>Расскажите, что беспокоит, назовите вид и примерный вес питомца и адрес.</p></li>
+      <li class="step"><span class="step__num">2</span><h3>Приезд врача</h3><p>Врач приезжает в согласованное время с нужными инструментами и препаратами.</p></li>
+      <li class="step"><span class="step__num">3</span><h3>Осмотр и цена</h3><p>Врач осматривает питомца и называет стоимость. Дальше — только с вашего согласия.</p></li>
+      <li class="step"><span class="step__num">4</span><h3>Помощь</h3><p>Процедура дома и рекомендации по уходу за питомцем.</p></li>
+    </ol>
+  </div>
+</section>
+
+{{part:cta}}
