@@ -154,7 +154,7 @@ window.SITE_CONFIG = {
   ],
   "formEndpoint": "",
   "analytics": {
-    "metrika": "113935488"
+    "metrika": "114168633"
   },
   "phone": "+7-812-945-56-34",
   "phoneHref": "+78129455634",
