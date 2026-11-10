@@ -1069,7 +1069,7 @@ def write_seo_files(pages):
              f"- [Усыпление кошки на дому]({SITE_URL}usyplenie-koshek.html)", f"- [Усыпление собаки на дому]({SITE_URL}usyplenie-sobak.html)",
              f"- [Кремация животных]({SITE_URL}kremaciya.html): общая и индивидуальная, урны, фото- и видеоотчёт",
              f"- [Кремация кошки]({SITE_URL}kremaciya-koshek.html)", f"- [Кремация собаки]({SITE_URL}kremaciya-sobak.html)",
-             f"- [Вывоз тела животного]({SITE_URL}vyvoz.html)", f"- [Цены и калькулятор]({SITE_URL}ceny.html)", f"- [Зона выезда]({SITE_URL}zona.html)",
+             f"- [Вывоз тела животного]({SITE_URL}vyvoz.html)", f"- [Ветеринар на дом]({SITE_URL}veterinar-na-dom.html): осмотр, лечение, прививки и операции на дому", f"- [Цены и калькулятор]({SITE_URL}ceny.html)", f"- [Зона выезда]({SITE_URL}zona.html)",
              f"- [О службе]({SITE_URL}o-nas.html)", f"- [Вопросы и ответы]({SITE_URL}faq.html)", f"- [Контакты]({SITE_URL}kontakty.html)", "",
              "## Памятки владельцам"] + [f"- [{t}]({SITE_URL}{h})" for h, _, _, _, t, _ in ARTICLES]
     if HIDE_EMPTY:
