@@ -434,8 +434,8 @@ def modals():
   </div>
 </dialog>
 <div class="cookie" id="cookie" hidden>
-  <p>С вашего согласия подключим Яндекс Метрику: cookie, IP-адрес и просмотренные страницы — для статистики сайта, данные хранятся в России. Изменить выбор можно внизу страницы. <a href="privacy.html#pravo">Подробнее</a></p>
-  <div class="btn-row"><button class="btn btn--primary btn--sm" type="button" data-consent="yes">Принять</button><button class="btn btn--sm" type="button" data-consent="no">Отказаться</button></div>
+  <p>Мы используем Яндекс Метрику (cookie, IP-адрес, просмотренные страницы) для статистики сайта, данные хранятся в России. Можно отказаться — тогда Метрика отключится. Изменить выбор можно внизу страницы. <a href="privacy.html#pravo">Подробнее</a></p>
+  <div class="btn-row"><button class="btn btn--primary btn--sm" type="button" data-consent="yes">Понятно</button><button class="btn btn--sm" type="button" data-consent="no">Отказаться</button></div>
 </div>'''
 
 

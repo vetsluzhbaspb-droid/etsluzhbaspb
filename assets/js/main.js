@@ -13,7 +13,7 @@
   var PH_PRICE = '<span class="tk">[ADD REAL PRICE]</span>';
   var priceHtml = function (v) { return isNum(v) ? (v === 0 ? "бесплатно" : "от " + rub(v)) : PH_PRICE; };
 
-  /* ---------- 1. Аналитика: события и загрузка счётчиков после согласия ---------- */
+  /* ---------- 1. Аналитика: события; Метрика загружается сразу, если посетитель не отказался ---------- */
   var A = C.analytics || {};
   var hasAnalytics = !!A.metrika; /* только Яндекс Метрика: данные хранятся в РФ (ч. 5 ст. 18 152-ФЗ) */
   window.dataLayer = window.dataLayer || [];
@@ -41,36 +41,45 @@
   function setConsent(v) { try { localStorage.setItem("ms-consent", v); } catch (e) {} }
 
   function initAnalytics() {
-    // Уведомление показывается при первом визите, пока посетитель не сделает выбор.
-    // Счётчики загружаются только после «Принять» и только если их ID заданы.
-    {
-      var c = getConsent();
-      var banner = $("#cookie");
-      if (c === "yes" && hasAnalytics) loadAnalytics();
-      else if (c !== "yes" && c !== "no" && banner) {
-        banner.hidden = false;
-        $$("[data-consent]", banner).forEach(function (b) {
-          b.addEventListener("click", function () {
-            var v = b.getAttribute("data-consent");
-            setConsent(v); banner.hidden = true;
-            if (v === "yes" && hasAnalytics) loadAnalytics();
-          });
-        });
-      }
+    // Метрика загружается сразу, если посетитель не отказался ("no").
+    // Баннер — уведомление: «Понятно» скрывает его, «Отказаться» отключает Метрику.
+    var c = getConsent();
+    var banner = $("#cookie");
+
+    if (c !== "no" && hasAnalytics) loadAnalytics();
+
+    function choose(v) {
+      var wasLoaded = getConsent() !== "no";
+      setConsent(v);
+      if (banner) banner.hidden = true;
+      // Метрика уже загружена — чтобы она перестала работать, перезагружаем страницу
+      if (v === "no" && wasLoaded && hasAnalytics) location.reload();
     }
+
+    if (c !== "yes" && c !== "no" && banner) {
+      banner.hidden = false;
+      $$("[data-consent]", banner).forEach(function (b) {
+        b.addEventListener("click", function () { choose(b.getAttribute("data-consent")); });
+      });
+    }
+
     // «Настроить cookie» в подвале: сбрасывает выбор и снова показывает уведомление
     $$("[data-cookie-reset]").forEach(function (b) {
       b.addEventListener("click", function () {
-        var had = getConsent() === "yes";
         try { localStorage.removeItem("ms-consent"); } catch (e) {}
-        if (had) { location.reload(); return; }
-        var banner = $("#cookie"); if (!banner) return;
+        if (!banner) return;
         banner.hidden = false;
         $$("[data-consent]", banner).forEach(function (x) {
-          x.onclick = function () { var v = x.getAttribute("data-consent"); setConsent(v); banner.hidden = true; if (v === "yes" && hasAnalytics) loadAnalytics(); };
+          x.onclick = function () {
+            var v = x.getAttribute("data-consent");
+            setConsent(v); banner.hidden = true;
+            if (v === "no") location.reload();
+            else if (hasAnalytics && !window.ym) loadAnalytics();
+          };
         });
       });
     });
+
     // Клики по телефону и мессенджерам
     document.addEventListener("click", function (e) {
       var a = e.target.closest("a[href]");
@@ -80,6 +89,7 @@
       else if (/wa\.me|whatsapp/i.test(href)) track("whatsapp_click", { link_url: href });
       else if (/t\.me\//i.test(href)) track("telegram_click", { link_url: href });
     });
+
     // Просмотр страницы услуги
     var svc = document.body.getAttribute("data-service");
     if (svc) track("service_page_view", { service: svc });
