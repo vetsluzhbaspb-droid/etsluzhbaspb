@@ -20,7 +20,7 @@ jobs:
           for f in *.html; do [ -f "_src/pages/$f" ] || rm -f "$f"; done
           SITE_OUT=. python3 _src/build.py
       - name: Копия сайта без исходников
-        run: rsync -a --exclude ".git" --exclude ".github" --exclude "_src" ./ "${{ runner.temp }}/site/"
+        run: rsync -a --exclude ".git" --exclude ".github" --exclude "_src" --exclude ".seo-agent" ./ "${{ runner.temp }}/site/"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
