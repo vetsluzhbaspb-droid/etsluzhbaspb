@@ -838,7 +838,7 @@ def org_node():
         n["areaServed"] = {"@type": "City", "name": D["city"]}
     if D["openingHoursSchema"]:
         n["openingHours"] = D["openingHoursSchema"]
-    allp = [v for s in D["services"].values() for v in s["prices"].values() if isinstance(v, (int, float))]
+    allp = [v for s in D["services"].values() for v in s["prices"].values() if isinstance(v, (int, float)) and v > 0]
     if allp:
         n["priceRange"] = f"{min(allp)}–{max(allp)} RUB"
         n["currenciesAccepted"] = "RUB"
@@ -884,8 +884,8 @@ def schema_graph(meta, fname, ctx):
         if D["city"]:
             node["areaServed"] = {"@type": "City", "name": D["city"]}
         prices = [p for k in svc.get("priceKeys", []) for p in ([min_price(k)] if min_price(k) is not None else [])]
-        allp = [v for k in svc.get("priceKeys", []) if k in D["services"] for v in D["services"][k]["prices"].values() if isinstance(v, (int, float))]
-        allp += [D["extras"][k]["price"] for k in svc.get("priceKeys", []) if k in D["extras"] and isinstance(D["extras"][k]["price"], (int, float))]
+        allp = [v for k in svc.get("priceKeys", []) if k in D["services"] for v in D["services"][k]["prices"].values() if isinstance(v, (int, float)) and v > 0]
+        allp += [D["extras"][k]["price"] for k in svc.get("priceKeys", []) if k in D["extras"] and isinstance(D["extras"][k]["price"], (int, float)) and D["extras"][k]["price"] > 0]
         if allp:
             node["offers"] = {"@type": "AggregateOffer", "priceCurrency": "RUB", "lowPrice": min(allp), "highPrice": max(allp), "url": page_url("ceny.html")}
         graph.append(node)
