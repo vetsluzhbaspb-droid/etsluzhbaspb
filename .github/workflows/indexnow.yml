@@ -1,0 +1,42 @@
+name: Отправка страниц на обход (IndexNow)
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Сборка сайта"]
+    types: [completed]
+
+jobs:
+  ping:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Подождать публикацию на GitHub Pages
+        run: sleep 90
+      - name: Проверить ключ на сайте
+        run: |
+          KEY_FILE=$(ls *.txt | grep -E '^[0-9a-f]{32}\.txt$' | head -1)
+          KEY=${KEY_FILE%.txt}
+          echo "KEY=$KEY" >> "$GITHUB_ENV"
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://vetsluzhbaspb.com/$KEY_FILE")
+          echo "Ключ на сайте: HTTP $code"; [ "$code" = "200" ]
+      - name: Отправить все страницы из sitemap.xml
+        run: |
+          python3 - <<'PY'
+          import json, os, re, urllib.request
+          urls = re.findall(r"<loc>([^<]+)</loc>", open("sitemap.xml", encoding="utf-8").read())
+          body = json.dumps({"host": "vetsluzhbaspb.com", "key": os.environ["KEY"],
+                             "keyLocation": f"https://vetsluzhbaspb.com/{os.environ['KEY']}.txt",
+                             "urlList": urls}).encode()
+          print(f"Страниц: {len(urls)}")
+          for ep in ("https://yandex.com/indexnow", "https://api.indexnow.org/indexnow"):
+              req = urllib.request.Request(ep, data=body, headers={"Content-Type": "application/json; charset=utf-8"})
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      print(ep, "→ HTTP", r.status)
+              except urllib.error.HTTPError as e:
+                  print(ep, "→ HTTP", e.code, e.read()[:200].decode(errors="replace"))
+              except Exception as e:
+                  print(ep, "→ ошибка", e)
+          PY
