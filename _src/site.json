@@ -43,9 +43,9 @@
   "whatsapp": "+79315305026",
   "telegram": "@VetSluzhbaSPB",
   "email": "",
-  "hours": "Ежедневно с 6:00 до 00:00",
+  "hours": "Круглосуточно, без выходных",
   "openingHoursSchema": [
-    "Mo-Su 06:00-23:59"
+    "Mo-Su 00:00-23:59"
   ],
   "address": {
     "street": "",
