@@ -1,0 +1,26 @@
+name: Резервная копия сайта
+on:
+  schedule:
+    - cron: "57 2 1,15 * *"   # 1-го и 15-го числа, 02:57 UTC (≈ раз в две недели)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: rezerv
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Упаковать сайт и сохранить в rezerv/
+        run: |
+          D=$(TZ=Europe/Moscow date +%Y-%m-%d)
+          mkdir -p rezerv
+          zip -qr9 "rezerv/vetsluzhbaspb-$D.zip" . -x ".git/*" "rezerv/*"
+          ls -1 rezerv/*.zip | sort | head -n -6 | xargs -r rm -f
+          ls -lh rezerv
+          git config user.name "Резервная копия"
+          git config user.email "actions@github.com"
+          git add -A rezerv
+          git commit -q -m "Резервная копия сайта $D" || echo "Нет изменений"
+          git push -q
