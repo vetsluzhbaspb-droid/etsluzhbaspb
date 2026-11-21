@@ -921,7 +921,7 @@ def redirect_stub(fname):
     to = "/" + route(fname)
     return (f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Страница переехала</title>'
             f'<link rel="canonical" href="{page_url(fname)}">'
-            f'<meta http-equiv="refresh" content="0; url={to}"><script>location.replace("{to}"+location.hash)</script></head>'
+            f'<script>location.replace("{to}"+location.search+location.hash)</script><noscript><meta http-equiv="refresh" content="0; url={to}"></noscript></head>'
             f'<body><a href="{to}">Перейти на страницу</a></body></html>\n')
 
 
