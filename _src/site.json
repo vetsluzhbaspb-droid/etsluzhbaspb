@@ -42,10 +42,10 @@
   "phone": "+7-812-945-56-34",
   "whatsapp": "+79315305026",
   "telegram": "@VetSluzhbaSPB",
-  "email": "",
-  "hours": "Круглосуточно, без выходных",
+  "email": "VetSluzhbaSPB@yandex.ru",
+  "hours": "Ежедневно с 6:00 до 00:00",
   "openingHoursSchema": [
-    "Mo-Su 00:00-23:59"
+    "Mo-Su 06:00-23:59"
   ],
   "address": {
     "street": "",
