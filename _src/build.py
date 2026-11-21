@@ -39,6 +39,8 @@ SRC = ROOT / "_src"
 OUT = Path(os.environ["SITE_OUT"]).resolve() if os.environ.get("SITE_OUT") else ROOT / "site"  # на GitHub собираем прямо в корень репозитория
 D = json.loads((SRC / "site.json").read_text(encoding="utf-8"))
 ART = json.loads((SRC / "articles.json").read_text(encoding="utf-8")) if (SRC / "articles.json").exists() else []
+# Блог — _src/blog.json: [{file, title, desc, date "ГГГГ-ММ-ДД", label}], новые сверху по дате
+BLOG = json.loads((SRC / "blog.json").read_text(encoding="utf-8")) if (SRC / "blog.json").exists() else []
 VER = time.strftime("%Y%m%d%H%M%S")
 TODAY = date.today().isoformat()
 
@@ -219,7 +221,7 @@ NAV = [
     {"id": "zona", "label": "Зона выезда", "href": "zona.html"},
     {"id": "stati", "label": "Полезное", "href": "stati.html",
      "cols": [("Памятки владельцу", "ARTICLES_NAV"),
-              ("Справка", [("book", "Все материалы", "stati.html"), ("chat", "Вопросы и ответы", "faq.html")])],
+              ("Справка", [("book", "Все материалы", "stati.html"), ("doc", "Блог", "blog.html"), ("chat", "Вопросы и ответы", "faq.html")])],
      "promo": None},
     {"id": "otzyvy", "label": "Отзывы", "href": "otzyvy.html"},
     {"id": "kontakty", "label": "Контакты", "href": "kontakty.html"},
@@ -321,7 +323,7 @@ def header(active):
 FOOTER_COLS = [
     ("Услуги", [("Усыпление на дому", "usyplenie.html"), ("Усыпление кошек", "usyplenie-koshek.html"), ("Усыпление собак", "usyplenie-sobak.html"), ("Кремация животных", "kremaciya.html"), ("Кремация кошек", "kremaciya-koshek.html"), ("Кремация собак", "kremaciya-sobak.html"), ("Вывоз тела", "vyvoz.html"), ("Урны для праха", "kremaciya.html#urny"), ("Ветеринар на дом", "veterinar-na-dom.html")]),
     ("Служба", [("О службе", "o-nas.html")] + ([] if HIDE_EMPTY else [("Врачи", "o-nas.html#vrachi")]) + [("Цены", "ceny.html"), ("Калькулятор", "ceny.html#kalkulyator"), ("Зона выезда", "zona.html"), ("Отзывы", "otzyvy.html")]),
-    ("Информация", [("Полезное", "stati.html"), ("Вопросы и ответы", "faq.html"), ("Контакты", "kontakty.html"), ("Обработка данных", "privacy.html"), ("Согласие на обработку", "soglasie.html")]),
+    ("Информация", [("Полезное", "stati.html"), ("Блог", "blog.html"), ("Вопросы и ответы", "faq.html"), ("Контакты", "kontakty.html"), ("Обработка данных", "privacy.html"), ("Согласие на обработку", "soglasie.html")]),
 ]
 
 
@@ -631,6 +633,21 @@ def article_cards(items=None, with_cat=False):
     return out
 
 
+def blog_cards(limit=None):
+    posts = sorted(BLOG, key=lambda b: b.get("date", ""), reverse=True)[:limit]
+    if not posts:
+        return '<p class="muted">Первые статьи появятся здесь совсем скоро.</p>'
+    out = ""
+    for b in posts:
+        d = b.get("date", "")
+        dt = f"{int(d[8:10])} {['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'][int(d[5:7])-1]} {d[:4]}" if len(d) == 10 else ""
+        out += f'''<a class="article-card" href="{html.escape(b["file"])}">
+        <span class="article-card__ico">{icon(b.get("icon") or "book")}</span>
+        <span class="article-card__body"><span class="eyebrow">{html.escape(b.get("label") or "Блог")}{" · " + dt if dt else ""}</span><span class="article-card__title">{html.escape(b["title"])}</span><span class="article-card__desc">{html.escape(b.get("desc", ""))}</span><span class="link-arrow">Читать{icon("arrow-right")}</span></span>
+      </a>'''
+    return out
+
+
 def zone_map_svg():
     zones = list(reversed(D["zones"]))
     radii = [140, 100, 60, 40]
@@ -926,6 +943,8 @@ PARTS = {
     "team": team_cards,
     "articles3": lambda: article_cards(),
     "articles-all": lambda: article_cards(ARTICLES, with_cat=True),
+    "blog-all": lambda: blog_cards(),
+    "blog3": lambda: blog_cards(3),
     "zone": lambda: zone_block(),
     "zone-h1": lambda: zone_block("h1"),
     "districts": districts_block,
