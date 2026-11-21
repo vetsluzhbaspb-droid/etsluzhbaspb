@@ -877,8 +877,52 @@ def website_node():
     return {"@type": "WebSite", "@id": WEBSITE_ID, "url": SITE_URL, "name": BRAND, "inLanguage": "ru-RU", "publisher": {"@id": ORG_ID}}
 
 
+# Чистые адреса: исходный файл → путь без .html (папка с index.html)
+ROUTE_OVERRIDES = {
+    "index.html": "",
+    "usyplenie-koshek.html": "usyplenie/koshki/", "usyplenie-sobak.html": "usyplenie/sobaki/",
+    "kremaciya-koshek.html": "kremaciya/koshki/", "kremaciya-sobak.html": "kremaciya/sobaki/",
+    "veterinar-na-dom.html": "veterinar/",
+}
+
+
+def route(fname):
+    """Путь страницы без ведущего «/»: usyplenie/koshki/, blog/slug/, stati/slug/."""
+    if fname in ROUTE_OVERRIDES:
+        return ROUTE_OVERRIDES[fname]
+    stem = fname[:-5]
+    for pre in ("blog-", "stati-"):
+        if stem.startswith(pre):
+            return pre[:-1] + "/" + stem[len(pre):] + "/"
+    return stem + "/"
+
+
 def page_url(fname):
-    return SITE_URL if fname == "index.html" else SITE_URL + fname
+    return SITE_URL + route(fname)
+
+
+def clean_links(text, existing):
+    """href="x.html#a" → "/x/#a", относительные assets/ → /assets/."""
+    def fix(m):
+        f, h = m.group(1), m.group(2) or ""
+        return f'href="/{route(f)}{h}"' if f in existing else m.group(0)
+    text = re.sub(r'href="([a-z0-9-]+\.html)(#[^"]*)?"', fix, text)
+    text = re.sub(r'\b(href|src|srcset)="assets/', r'\1="/assets/', text)
+    text = re.sub(r'(srcset="[^"]*?), assets/', r'\1, /assets/', text)
+    return text
+
+
+# Старые имена файлов, которые уже могли попасть в поиск → новая страница
+LEGACY = {"blog-kogda-pora-usypit-sobaku.html": "blog-kogda-usypit-sobaku.html",
+          "blog-vyzov-veterinara-na-dom-kogda-nuzhen.html": "blog-vyzov-veterinara.html"}
+
+
+def redirect_stub(fname):
+    to = "/" + route(fname)
+    return (f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Страница переехала</title>'
+            f'<link rel="canonical" href="{page_url(fname)}">'
+            f'<meta http-equiv="refresh" content="0; url={to}"><script>location.replace("{to}"+location.hash)</script></head>'
+            f'<body><a href="{to}">Перейти на страницу</a></body></html>\n')
 
 
 def schema_graph(meta, fname, ctx):
@@ -1093,7 +1137,8 @@ def write_seo_files(pages):
              "## Памятки владельцам"] + [f"- [{t}]({SITE_URL}{h})" for h, _, _, _, t, _ in ARTICLES]
     if HIDE_EMPTY:
         lines = [l for l in lines if not re.match(r"^- [^:]+: ?$", l)]
-    (OUT / "llms.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    txt = re.sub(re.escape(SITE_URL) + r"([a-z0-9-]+\.html)", lambda m: page_url(m.group(1)), "\n".join(lines))
+    (OUT / "llms.txt").write_text(txt + "\n", encoding="utf-8")
 
 
 def unwrap_dead_links(text, existing):
@@ -1120,10 +1165,19 @@ def main():
             raise SystemExit(f"Необработанный шорткод в {p.name}: " + re.search(r"\{\{[^}]*\}\}", out_html).group(0))
         # ссылки на главную ведём на «/», а не на дубль /index.html
         out_html = unwrap_dead_links(out_html, existing)
-        out_html = out_html.replace('href="index.html#', 'href="./#').replace('href="index.html"', 'href="./"')
-        (OUT / p.name).write_text(out_html, encoding="utf-8")
+        out_html = clean_links(out_html, existing)
+        if p.name in ("index.html", "404.html"):
+            (OUT / p.name).write_text(out_html, encoding="utf-8")
+        else:
+            d = OUT / route(p.name)
+            d.mkdir(parents=True, exist_ok=True)
+            (d / "index.html").write_text(out_html, encoding="utf-8")
+            (OUT / p.name).write_text(redirect_stub(p.name), encoding="utf-8")  # старые адреса .html → новые
         names.append(p.name)
         print("✓", p.name)
+    for old, new in LEGACY.items():
+        if new in existing:
+            (OUT / old).write_text(redirect_stub(new), encoding="utf-8")
     write_config_js()
     write_seo_files(names)
     print("✓ config.js, sitemap.xml, robots.txt, llms.txt")
