@@ -41,6 +41,7 @@
   --font-accent: var(--font);
   --wa: #1d7a47;
   --tg: #1a6fa8;
+  --max: #5b3fd6;
   --ph-bg: #fff4d6;
   --ph-ink: #6b4e00;
   --fs-h1: clamp(2rem, 1.35rem + 2.4vw, 3rem);
@@ -714,6 +715,9 @@ html:has(.subnav) { scroll-padding-top: calc(var(--header-h) + 72px); }
 .btn--tg:hover { color: #fff; border-color: var(--tg); }
 .chip.msg-wa .icon { color: var(--wa); }
 .chip.msg-tg .icon { color: var(--tg); }
+.btn--max { background: var(--max); border-color: var(--max); color: #fff; }
+.btn--max:hover { color: #fff; border-color: var(--max); }
+.chip.msg-max .icon { color: var(--max); }
 
 /* Плавающая кнопка мессенджера (десктоп; на мобильных — нижняя панель) */
 .fab { position: fixed; right: 20px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 41; display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 12px 20px; border-radius: 999px; border: 0; background: linear-gradient(115deg, var(--primary), var(--primary-2)); color: #fff; font: inherit; font-weight: 600; text-decoration: none; box-shadow: var(--shadow-lg); cursor: pointer; }

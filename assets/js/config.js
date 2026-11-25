@@ -160,6 +160,7 @@ window.SITE_CONFIG = {
   "phoneHref": "+78129455634",
   "whatsappUrl": "https://wa.me/79315305026",
   "telegramUrl": "https://t.me/VetSluzhbaSPB",
+  "maxUrl": "https://max.ru/u/f9LHodD0cOI2PNPf7tD1uEE5YOmcok2stvaSSk4RSRkGvGCdaM4CfFFleBE",
   "tgBot": {
     "token": "8722221858:AAE_B66ZJzbfhF244P18OdSSTYCHjmQamr8",
     "chatId": "361655089,9222388135"

@@ -95,6 +95,7 @@ def digits(s):
 PHONE_HREF = ("+" + digits(D["phone"])) if digits(D["phone"]) else ""
 WA_URL = f"https://wa.me/{digits(D['whatsapp'])}" if digits(D["whatsapp"]) else ""
 TG_URL = f"https://t.me/{D['telegram'].lstrip('@')}" if D["telegram"] else ""
+MAX_URL = (D.get("max") or "").strip()
 CITY_IN = (" " + D["cityIn"].strip()) if D["cityIn"].strip() else ""
 
 
@@ -185,6 +186,8 @@ def messenger_links(cls="chip"):
         out.append(f'<a class="{cls} msg-wa" href="{WA_URL}" target="_blank" rel="noopener" data-track="whatsapp_click">{icon("whatsapp")}WhatsApp</a>')
     if TG_URL:
         out.append(f'<a class="{cls} msg-tg" href="{TG_URL}" target="_blank" rel="noopener" data-track="telegram_click">{icon("telegram")}Telegram</a>')
+    if MAX_URL:
+        out.append(f'<a class="{cls} msg-max" href="{MAX_URL}" target="_blank" rel="noopener" data-track="max_click">{icon("chat")}MAX</a>')
     return "".join(out)
 
 
@@ -452,6 +455,8 @@ def contact_buttons():
         out.append(f'<a class="btn btn--wa" href="{WA_URL}" target="_blank" rel="noopener" data-track="whatsapp_click">{icon("whatsapp")}WhatsApp</a>')
     if TG_URL:
         out.append(f'<a class="btn btn--tg" href="{TG_URL}" target="_blank" rel="noopener" data-track="telegram_click">{icon("telegram")}Telegram</a>')
+    if MAX_URL:
+        out.append(f'<a class="btn btn--max" href="{MAX_URL}" target="_blank" rel="noopener" data-track="max_click">{icon("chat")}MAX</a>')
     return "".join(out)
 
 
@@ -700,6 +705,8 @@ def facts_block(heading="h2"):
         contacts.append(f'<a href="{WA_URL}" data-track="whatsapp_click" target="_blank" rel="noopener">WhatsApp</a>')
     if TG_URL:
         contacts.append(f'<a href="{TG_URL}" data-track="telegram_click" target="_blank" rel="noopener">Telegram</a>')
+    if MAX_URL:
+        contacts.append(f'<a href="{MAX_URL}" data-track="max_click" target="_blank" rel="noopener">MAX</a>')
     contacts.append('<a href="kontakty.html">форма заявки</a>')
     rows = [
         ("Кто мы", f"«{BRAND}» — выездная ветеринарная служба. Врачи приезжают к питомцу домой. <a href=\"o-nas.html\">Подробнее о службе</a>."),
@@ -1013,7 +1020,7 @@ COND = {
     "reviews": bool(REVIEWS) or not HIDE_EMPTY,  # блок отзывов виден, когда есть хотя бы один отзыв
     "phone": bool(PHONE_HREF) or not HIDE_EMPTY,
     "nophone": not PHONE_HREF and HIDE_EMPTY,
-    "messengers": bool(WA_URL or TG_URL) or not HIDE_EMPTY,
+    "messengers": bool(WA_URL or TG_URL or MAX_URL) or not HIDE_EMPTY,
     "email": bool(D["email"]) or not HIDE_EMPTY,
     "experience": bool(D["experience"]) or not HIDE_EMPTY,
     "legal": bool(legal_text()) or not HIDE_EMPTY,
@@ -1103,7 +1110,7 @@ def page(meta, body, fname, ctx):
 # --------------------------------------------------------------------------
 def write_config_js():
     cfg = {k: D[k] for k in ["brand", "weights", "species", "services", "extras", "zones", "formEndpoint", "analytics"]}
-    cfg.update({"phone": D["phone"], "phoneHref": PHONE_HREF, "whatsappUrl": WA_URL, "telegramUrl": TG_URL})
+    cfg.update({"phone": D["phone"], "phoneHref": PHONE_HREF, "whatsappUrl": WA_URL, "telegramUrl": TG_URL, "maxUrl": MAX_URL})
     if BOT_MODE:
         cfg["tgBot"] = {"token": TG_BOT["token"], "chatId": TG_BOT["chatId"]}
     js = ("/* Сгенерировано из _src/site.json сборщиком _src/build.py — не редактируйте вручную.\n"
@@ -1124,7 +1131,7 @@ def write_seo_files(pages):
     ph = lambda v, name: v if v else ("" if HIDE_EMPTY else f"[ADD REAL {name}]")
     lines = [f"# {BRAND}", "", f"> {TAGLINE}. Выездная ветеринарная служба: гуманное усыпление животных на дому по медицинским показаниям, общая и индивидуальная кремация, вывоз тела, урны и доставка праха.", "",
              "## Факты", f"- Где работаем: {ph(D['serviceArea'], 'SERVICE AREA')}", f"- Город: {ph(D['city'], 'CITY')}", f"- Часы работы: {ph(D['hours'], 'HOURS')}",
-             f"- Телефон: {ph(D['phone'], 'PHONE')}", f"- E-mail: {ph(D['email'], 'EMAIL')}", f"- WhatsApp: {WA_URL or ('' if HIDE_EMPTY else '[ADD REAL WHATSAPP]')}", f"- Telegram: {TG_URL or ('' if HIDE_EMPTY else '[ADD REAL TELEGRAM]')}",
+             f"- Телефон: {ph(D['phone'], 'PHONE')}", f"- E-mail: {ph(D['email'], 'EMAIL')}", f"- WhatsApp: {WA_URL or ('' if HIDE_EMPTY else '[ADD REAL WHATSAPP]')}", f"- Telegram: {TG_URL or ('' if HIDE_EMPTY else '[ADD REAL TELEGRAM]')}", *([f"- MAX: {MAX_URL}"] if MAX_URL else []),
              f"- Цены: усыпление на дому — {('от ' + str(min_price('euth')) + ' ₽') if min_price('euth') else '[ADD REAL PRICE]'}; общая кремация — {('от ' + str(min_price('common')) + ' ₽') if min_price('common') else '[ADD REAL PRICE]'}; индивидуальная кремация — {('от ' + str(min_price('individual')) + ' ₽') if min_price('individual') else '[ADD REAL PRICE]'}",
              "- Животные: кошки, собаки, грызуны, кролики, хорьки, птицы, рептилии", "- Язык: русский", "",
              "## Основные страницы",
