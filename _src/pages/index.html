@@ -7,7 +7,7 @@
       <p class="lead">Врач приедет к вам круглосуточно: осмотр, лечение, прививки и операции — без поездки в клинику и стресса для питомца. Если нужно, бережно поможем с усыплением и кремацией.</p>
       <div class="btn-row">
         <button class="btn btn--primary" type="button" data-open="callback" data-topic="Вызов ветеринара на дом">{{i:chat}}Вызвать врача</button>
-        <a class="btn" href="veterinar-na-dom.html#ceny-vet">{{i:calc}}Узнать цену</a>
+        <a class="btn" href="#ceny-vet">{{i:calc}}Узнать цену</a>
       </div>
       {{contactline}}
       {{part:messengers}}
@@ -40,16 +40,16 @@
     <div class="section-head"><div class="section-head__text"><h2>С чем мы можем помочь</h2></div></div>
     <div class="grid grid-3">
       <article class="card scenario">
+        <span class="card__ico">{{i:home}}</span>
+        <h3>Питомец заболел</h3>
+        <p>Ветеринар приедет домой, осмотрит питомца, назначит лечение и при необходимости сразу сделает уколы или капельницу.</p>
+        <div class="card__foot"><button class="link-arrow calc-inline-link" type="button" data-open="callback" data-topic="Вызов ветеринара на дом">Вызвать врача{{i:arrow-right}}</button></div>
+      </article>
+      <article class="card scenario">
         <span class="card__ico">{{i:chat}}</span>
         <h3>Хочу сначала посоветоваться</h3>
         <p>Расскажите о состоянии питомца. Объясним, какие есть варианты и как проходит визит врача.</p>
         <div class="card__foot"><button class="link-arrow calc-inline-link" type="button" data-open="callback" data-topic="Консультация">Получить консультацию{{i:arrow-right}}</button></div>
-      </article>
-      <article class="card scenario">
-        <span class="card__ico">{{i:home}}</span>
-        <h3>Нужен врач на дом</h3>
-        <p>Ветеринар приедет в согласованное время, осмотрит питомца и обсудит с вами дальнейшие шаги.</p>
-        <div class="card__foot"><button class="link-arrow calc-inline-link" type="button" data-open="callback" data-topic="Усыпление на дому">Вызвать врача{{i:arrow-right}}</button></div>
       </article>
       <article class="card scenario">
         <span class="card__ico">{{i:heart}}</span>
@@ -61,10 +61,27 @@
   </div>
 </section>
 
+<section class="section section--tight" id="veterinar">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text"><span class="eyebrow">Главное направление</span><h2>Ветеринар на дом</h2></div>
+      <a class="link-arrow" href="veterinar-na-dom.html">Подробнее о выезде врача{{i:arrow-right}}</a>
+    </div>
+    <div class="grid grid-4">
+      <a class="card card--link card--stretch card--media" href="veterinar-na-dom.html#lechenie"><img class="card__img" src="assets/img/card-vet-lechenie.webp" width="640" height="480" alt="Иллюстрация: ветеринар слушает стетоскопом кошку на диване дома" loading="lazy" decoding="async"><h3>Осмотр и лечение</h3><p>Осмотр, назначение лечения, уколы и капельницы дома.</p><span class="link-arrow card__foot">Подробнее{{i:arrow-right}}</span></a>
+      <a class="card card--link card--stretch card--media" href="veterinar-na-dom.html#profilaktika"><img class="card__img" src="assets/img/card-vet-profilaktika.webp" width="640" height="480" alt="Иллюстрация: собака спокойно сидит дома, врач готовит прививку" loading="lazy" decoding="async"><h3>Вакцинация и профилактика</h3><p>Прививки, обработка от блох, клещей и глистов.</p><span class="link-arrow card__foot">Подробнее{{i:arrow-right}}</span></a>
+      <a class="card card--link card--stretch card--media" href="veterinar-na-dom.html#operacii"><img class="card__img" src="assets/img/card-vet-operacii.webp" width="640" height="480" alt="Иллюстрация: кошка после операции спит в корзинке в попоне" loading="lazy" decoding="async"><h3>Операции на дому</h3><p>Стерилизация и кастрация без перевозки питомца.</p><span class="link-arrow card__foot">Подробнее{{i:arrow-right}}</span></a>
+      <a class="card card--link card--stretch card--media" href="veterinar-na-dom.html#zuby"><img class="card__img" src="assets/img/card-vet-zuby.webp" width="640" height="480" alt="Иллюстрация: собака с перевязанной лапой отдыхает на пледе" loading="lazy" decoding="async"><h3>Зубы и восстановление</h3><p>Чистка зубов, швы, перевязки, восстановление после травм.</p><span class="link-arrow card__foot">Подробнее{{i:arrow-right}}</span></a>
+    </div>
+  </div>
+</section>
+
+{{part:prices-vet}}
+
 <section class="section section--tight" id="uslugi">
   <div class="container">
     <div class="section-head">
-      <div class="section-head__text"><h2>Услуги</h2></div>
+      <div class="section-head__text"><h2>Усыпление и кремация</h2></div>
       <a class="link-arrow" href="ceny.html">Все цены{{i:arrow-right}}</a>
     </div>
     <div class="grid grid-4">
@@ -122,8 +139,8 @@
       <li class="step"><span class="step__num">1</span><h3>Звонок или заявка</h3><p>Расскажите о питомце и ситуации. Ответим на вопросы и уточним адрес.</p></li>
       <li class="step"><span class="step__num">2</span><h3>Время и цена</h3><p>Договоримся о времени визита и назовём ориентировочную стоимость.</p></li>
       <li class="step"><span class="step__num">3</span><h3>Осмотр и разговор</h3><p>Врач осмотрит питомца, ответит на вопросы и подтвердит стоимость.</p></li>
-      <li class="step"><span class="step__num">4</span><h3>Процедура</h3><p>Только после вашего согласия. Сначала глубокий сон, затем основной этап.</p></li>
-      <li class="step"><span class="step__num">5</span><h3>Кремация и урна</h3><p>По вашему выбору заберём тело, проведём кремацию и вернём прах.</p></li>
+      <li class="step"><span class="step__num">4</span><h3>Лечение</h3><p>Только после вашего согласия: уколы, капельницы, прививки или операция на дому.</p></li>
+      <li class="step"><span class="step__num">5</span><h3>Рекомендации</h3><p>Расскажем, как ухаживать за питомцем дальше, и договоримся о повторном визите, если он нужен.</p></li>
     </ol>
     {{cta:Готовы обсудить визит? Оставьте заявку — перезвоним и согласуем время.}}
   </div>
@@ -204,7 +221,7 @@
       <div class="section-head__text"><h2>Частые вопросы</h2></div>
       <a class="link-arrow" href="faq.html">Все вопросы и ответы{{i:arrow-right}}</a>
     </div>
-    {{faq:vkljuchaet,cena,kogda,bol,ryadom,dlitsya,noch,kvartira,rayon,vidy,umer,format}}
+    {{faq:osmotr,noch,kvartira,rayon,vidy,dlitsya,cena,vkljuchaet,kogda,bol,umer,format}}
   </div>
 </section>
 
