@@ -847,7 +847,7 @@ def strip_tags(s):
 
 def org_node():
     n = {"@type": ["VeterinaryCare", "LocalBusiness"], "@id": ORG_ID, "name": BRAND, "url": SITE_URL,
-         "logo": SITE_URL + "assets/img/logo-512.png", "image": SITE_URL + "assets/img/og-image.png",
+         "logo": SITE_URL + "assets/img/logo-512.png", "image": SITE_URL + "assets/img/og-cover.jpg",
          "description": "Выездная ветеринарная служба: гуманное усыпление животных на дому по медицинским показаниям, общая и индивидуальная кремация, вывоз тела, урны и доставка праха.",
          "knowsLanguage": "ru"}
     if PHONE_HREF:
@@ -962,7 +962,7 @@ def schema_graph(meta, fname, ctx):
         graph.append({"@type": "Article", "@id": url + "#article", "headline": art["headline"], "description": meta["description"],
                       "datePublished": art["datePublished"], "dateModified": TODAY, "inLanguage": "ru-RU",
                       "author": {"@id": ORG_ID}, "publisher": {"@id": ORG_ID}, "mainEntityOfPage": {"@id": url + "#webpage"},
-                      "image": SITE_URL + "assets/img/og-image.png"})
+                      "image": SITE_URL + "assets/img/og-cover.jpg"})
     qa = [(q, strip_tags(a)) for q, a in ctx.faq if "[ADD REAL" not in a and "[ADD REAL" not in q]
     if qa:
         graph.append({"@type": "FAQPage", "@id": url + "#faq", "isPartOf": {"@id": url + "#webpage"},
@@ -1078,7 +1078,7 @@ def page(meta, body, fname, ctx):
 <meta property="og:site_name" content="{BRAND}">
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
-<meta property="og:image" content="{SITE_URL}assets/img/og-image.png">
+<meta property="og:image" content="{SITE_URL}assets/img/og-cover.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
