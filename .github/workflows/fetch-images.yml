@@ -1,0 +1,49 @@
+# Служебная задача Claude: скачать картинки (Higgsfield и т.п.) в assets/img в формате webp 640x480.
+# Запуск: gh workflow run fetch-images.yml -f list="имя1=https://...png имя2=https://...png"
+name: Картинки в assets/img
+on:
+  workflow_dispatch:
+    inputs:
+      list:
+        description: "Пары имя=URL через пробел (имя без расширения, латиница)"
+        required: true
+      size:
+        description: "Размер ШxВ"
+        default: "640x480"
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Скачать и сжать
+        env:
+          LIST: ${{ inputs.list }}
+          SIZE: ${{ inputs.size }}
+        run: |
+          set -e
+          pip install -q pillow
+          for pair in $LIST; do
+            name="${pair%%=*}"; url="${pair#*=}"
+            case "$name" in *[!a-z0-9-]*|"") echo "плохое имя: $name"; exit 1;; esac
+            case "$url" in https://d8j0ntlcm91z4.cloudfront.net/*|https://*.higgsfield.ai/*) ;; *) echo "чужой адрес: $url"; exit 1;; esac
+            curl -sfL -o "/tmp/$name.src" "$url"
+            python3 - "$name" "$SIZE" <<'PY'
+          import sys
+          from PIL import Image, ImageOps
+          n, size = sys.argv[1], sys.argv[2]
+          w, h = map(int, size.lower().split("x"))
+          im = ImageOps.fit(Image.open(f"/tmp/{n}.src").convert("RGB"), (w, h), Image.LANCZOS)
+          im.save(f"assets/img/{n}.webp", "WEBP", quality=80, method=6)
+          PY
+            ls -la "assets/img/$name.webp"
+          done
+      - name: Коммит
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/img
+          git diff --cached --quiet && exit 0
+          git commit -m "Картинки: ${{ inputs.list }}" | head -1
+          git pull --rebase -q && git push
