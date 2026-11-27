@@ -908,6 +908,19 @@ def page_url(fname):
     return SITE_URL + route(fname)
 
 
+CALL_BTN_RE = re.compile(r'<button([^>]*?)\stype="button"\sdata-open="callback"(?:\sdata-topic="[^"]*")?([^>]*)>((?:(?!</button>).)*?Вызвать врача(?:(?!</button>).)*?)</button>', re.S)
+
+
+def call_buttons(text):
+    """Кнопки «Вызвать врача» сразу звонят на номер службы (владелец 27.11.2026), а не открывают форму."""
+    if not PHONE_HREF:
+        return text
+    def fix(m):
+        inner = m.group(3).replace('href="#i-chat"', 'href="#i-phone"')
+        return f'<a{m.group(1)}{m.group(2)} href="tel:{PHONE_HREF}">{inner}</a>'
+    return CALL_BTN_RE.sub(fix, text)
+
+
 def clean_links(text, existing):
     """href="x.html#a" → "/x/#a", относительные assets/ → /assets/."""
     def fix(m):
@@ -1173,6 +1186,7 @@ def main():
         # ссылки на главную ведём на «/», а не на дубль /index.html
         out_html = unwrap_dead_links(out_html, existing)
         out_html = clean_links(out_html, existing)
+        out_html = call_buttons(out_html)
         if p.name in ("index.html", "404.html"):
             (OUT / p.name).write_text(out_html, encoding="utf-8")
         else:
